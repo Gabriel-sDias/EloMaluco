@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<root>
+    <humans>
+        <person>
+            <name>John Doe</name>
+            <name>CHSOS</name>
+            <name>MARCOS</name>
+            <name>Cleber</name>
+        </person>
+        <person>
+            <name>Jane Smith</name>
+            <name>SASAN</name>
+            <name>DONMPAN</name>
+            <name>DWONAS</name>
+        </person>
+    </humans>
+</root>
