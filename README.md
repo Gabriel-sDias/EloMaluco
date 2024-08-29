@@ -1,24 +1,21 @@
 # EloMaluco
 Projeto desenvolvido na disciplina de Computação Grafica.
 
-
-# Install the following packages:
+# How to run the project
+### Install the following packages:
 
 sudo apt-get install cmake build-essential libgl1-mesa-dev freeglut3 libxmu-dev libxi-dev libglm-dev
 
-#Generate makefile by cmake
+### Generate makefile by cmake:
 
 mkdir build
 cd build
 cmake ..
 
-# Compile:
+### Compile:
 
 make
 
-# execute:
+### Execute:
 
 ./Elo_Maluco
-
-
-it's all!
