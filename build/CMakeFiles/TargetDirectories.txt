@@ -1,0 +1,3 @@
+/home/robert/Workspace/Faculdade/PDI/example_code/build/CMakeFiles/Elo_Maluco.dir
+/home/robert/Workspace/Faculdade/PDI/example_code/build/CMakeFiles/edit_cache.dir
+/home/robert/Workspace/Faculdade/PDI/example_code/build/CMakeFiles/rebuild_cache.dir
