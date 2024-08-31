@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -78,22 +77,3 @@ public:
 		return finallState;
 	}
 };
-
-int main()
-{
-	string directory = "exemplo.xml";
-	Reader reader(directory);
-	vector<string> estados = reader.getStates();
-	for (string i: estados)
-    std::cout << i << ' ';
-}
-
-/*
-	Vermelho = vm
-	Verde = vr
-	Amarelo = am
-	Branco = br
-	Superior = s
-	Intermediario = m
-	Inferior = i
-*/
