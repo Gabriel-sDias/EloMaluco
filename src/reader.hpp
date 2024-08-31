@@ -1,8 +1,12 @@
+#ifndef READER_HPP
+#define READER_HPP
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <tinyxml2.h>
+
+
 using namespace std;
 using namespace tinyxml2;
 class Reader
@@ -11,12 +15,11 @@ private:
 	XMLDocument doc;
 	string fileDirectory;
 	vector<string> states;
-	string initialState;
-	string finallState;
+	const char* archive;
 
-	void fillStates(string archive)
+	void fillStates()
 	{
-		XMLError result = doc.LoadFile("exemplo.xml");
+		XMLError result = doc.LoadFile(archive);
 		if (result != XML_SUCCESS)
 		{
 			std::cerr << "Error loading XML file!" << std::endl;
@@ -59,21 +62,15 @@ private:
 	}
 
 public:
-	Reader(string directory)
+	Reader(const char* directory)
 	{
-		fileDirectory = directory;
-		fillStates(fileDirectory);
+		archive = directory;
+		fillStates();
 	}
 	vector<string> getStates()
 	{
 		return states;
 	}
-	string getInitialState()
-	{
-		return initialState;
-	}
-	string getFinalState()
-	{
-		return finallState;
-	}
+
 };
+#endif
