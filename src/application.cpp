@@ -100,41 +100,11 @@ void Application::draw()
         
         // Draw the 5 square faces of the cube
         glBegin(GL_QUADS);
-            // Front face
-            // Front face
-            glColor3f(0.5f, 0.0f, 0.0f);
-            glVertex3f(-1.0f, -1.0f, 1.0f);
-            glVertex3f(1.0f, -1.0f, 1.0f);
-            glVertex3f(1.0f, 1.0f, 1.0f);
-            glVertex3f(-1.0f, 1.0f, 1.0f);
-            
-            // Left face
-            glColor3f(0.6f, 0.0f, 0.0f);
-            glVertex3f(-1.0f, -1.0f, -1.0f);
-            glVertex3f(-1.0f, -1.0f, 1.0f);
-            glVertex3f(-1.0f, 1.0f, 1.0f);
-            glVertex3f(-1.0f, 1.0f, -1.0f);
-            
-            // Right face
-            glColor3f(0.0f, 0.0f, 1.0f);
-            glVertex3f(1.0f, -1.0f, -1.0f);
-            glVertex3f(1.0f, -1.0f, 1.0f);
-            glVertex3f(1.0f, 1.0f, 1.0f);
-            glVertex3f(1.0f, 1.0f, -1.0f);
-            
-            // Top face
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glVertex3f(-1.0f, 1.0f, -1.0f);
-            glVertex3f(1.0f, 1.0f, -1.0f);
-            glVertex3f(1.0f, 1.0f, 1.0f);
-            glVertex3f(-1.0f, 1.0f, 1.0f);
-            
-            // Bottom face
-            glColor3f(1.0f, 0.0f, 0.0f);
-            glVertex3f(-1.0f, -1.0f, -1.0f);
-            glVertex3f(1.0f, -1.0f, -1.0f);
-            glVertex3f(1.0f, -1.0f, 1.0f);
-            glVertex3f(-1.0f, -1.0f, 1.0f);
+            glm::vec3 leftDown = glm::vec3(-1.0f, -1.0f, 1.0f);
+            glm::vec3 rightTop = glm::vec3(1.0f, 1.0f, 1.0f);
+            glm::vec3 color = glm::vec3(0.0f, 0.0f, 1.0f);
+            Square frontFace(leftDown, rightTop, color);
+            frontFace.draw();
         glEnd();
         
     glPopMatrix();
