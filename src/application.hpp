@@ -12,6 +12,7 @@
 #include "tinyxml2.h"
 #include "Objects.hpp"
 #include "triangle.hpp"
+#include "square.hpp"
 
 #ifndef __APPLICATION_HPP__
 #define __APPLICATION_HPP__
