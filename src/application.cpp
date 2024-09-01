@@ -79,33 +79,20 @@ void Application::draw()
         glEnd();
     	glPopMatrix();
 
-    glPushMatrix();
-        glTranslatef(0.0f, -2.0f, -4.0f);
-        glScalef(2.0f, 2.0f, 2.0f); // Increase the size of the cube
-        glColor3f(1.0f, 0.0f, 0.0f); // Red color
-        glutSolidCube(2.0f);
-    glPopMatrix();
+        int size = 2;
+        glm::vec3 basePoint(0.0f, 0.0f, 0.0f);
+        Cube cube1(basePoint, size);
+        cube1.draw();
 
-    glPushMatrix();
-        glTranslatef(0.0f, -2.0f, 0.0f);
-        glScalef(2.0f, 2.0f, 2.0f); // Increase the size of the cube
-        glColor3f(0.0f, 1.0f, 0.0f); // Green color
-        glutSolidCube(2.0f);
-    glPopMatrix();
+        Cube cube2(glm::vec3(0.0f, 0.0f, size/1.0f), size);
+        cube2.draw();
 
-    glPushMatrix();
-        glTranslatef(0.0f, -2.0f, 4.0f);
-        glScalef(2.0f, 2.0f, 2.0f); // Increase the size of the cube
-        glColor3f(0.0f, 0.0f, 1.0f); // Blue color
-        
-        // Draw the 5 square faces of the cube
-        glBegin(GL_QUADS);
-            glm::vec3 leftDown = glm::vec3(-1.0f, -1.0f, 1.0f);
-            glm::vec3 rightTop = glm::vec3(1.0f, 1.0f, 1.0f);
-            glm::vec3 color = glm::vec3(0.0f, 0.0f, 1.0f);
-            Square frontFace(leftDown, rightTop, color);
-            frontFace.draw();
-        glEnd();
+        Cube cube3(glm::vec3(0.0f, 0.0f, 2*size/1.0f), size);
+        cube3.draw();
+
+        Cube cube4(glm::vec3(0.0f, 0.0f, 3*size/1.0f), size);
+        cube4.draw();
+
         
     glPopMatrix();
 
@@ -136,7 +123,7 @@ void Application::resize(GLsizei w, GLsizei h)
     glLoadIdentity();
     gluPerspective(60,(GLdouble)view_w/view_h,1,100);
 
-    double rate=1;
+    double rate=1.2;
     gluLookAt(rate*5,rate*10,rate*10,0,0,0,0,0,1);
     glMatrixMode(GL_MODELVIEW);    
     glLoadIdentity() ;

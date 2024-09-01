@@ -75,6 +75,7 @@ set(HDRS
     src/triangle.hpp
     src/tinyxml2.h
     src/square.hpp
+    src/cube.hpp
 )
 
 
@@ -86,6 +87,7 @@ set(SRCS
     src/triangle.cpp
     src/tinyxml2.cpp
     src/square.cpp
+    src/cube.cpp
 )
 
 ################################################################################
