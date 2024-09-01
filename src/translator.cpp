@@ -59,18 +59,3 @@ std::array<std::array<glm::vec3, 4>, 4> Translator::getColorsRGB(){
     return this->colorsRGB;
 }
 
-/*int main(){
-	const char* archive ="/home/gabriel/PDI/projetoPDI/EloMaluco/data/exemplo.xml";
-	Reader r(archive);
-    vector<string> s = r.getStates();
-    Translator t(s);
-    std::array<std::array<glm::vec3, 4>, 4> x = t.getColorsRGB();
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            std::cout << x[i][j].x << " ";
-            std::cout << x[i][j].y << " ";
-            std::cout << x[i][j].z << " ";
-        }
-        std::cout << std::endl;
-    }
-}*/
