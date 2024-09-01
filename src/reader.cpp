@@ -79,14 +79,6 @@ public:
 	}
 };
 
-int main()
-{
-	string directory = "exemplo.xml";
-	Reader reader(directory);
-	vector<string> estados = reader.getStates();
-	for (string i: estados)
-    std::cout << i << ' ';
-}
 
 /*
 	Vermelho = vm

@@ -7,7 +7,8 @@
 #include <stdio.h>
 #include <array>
 #include "application.hpp"
-
+#include "reader.hpp"
+#include "translator.hpp"
 
 ///////////////////////////////////////////////////////////////////////
 // Application Class
@@ -54,6 +55,11 @@ void Application::draw()
     // Verde - Eixo Y
     // Azul - Eixo Z
     // Vermelho - Eixo X
+    const char* directory = "/home/gabriel/PDI/projetoPDI/EloMaluco/data/exemplo.xml";
+    Reader r(directory);
+    vector<string> states = r.getStates();
+    Translator translator(states);
+    std::array<std::array<glm::vec3, 4>, 4> colors = translator.getColorsRGB();
     glMatrixMode(GL_MODELVIEW);
      glLoadIdentity();
                    
@@ -82,33 +88,12 @@ void Application::draw()
 
         int size = 2;
         glm::vec3 basePoint(0.0f, 0.0f, 0.0f);
-        std::array<std::array<glm::vec3, 4>, 4> array2D;
-
-        // Initialize the array
-        array2D[0][0] = glm::vec3(0.0f, 0.0f, 0.0f); // yellow
-        array2D[0][1] = glm::vec3(0.0f, 1.0f, 0.0f); // green
-        array2D[0][2] = glm::vec3(1.0f, 1.0f, 1.0f); // white
-        array2D[0][3] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
-
-        array2D[1][0] = glm::vec3(1.0f, 0.0f, 0.0f); // red
-        array2D[1][1] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
-        array2D[1][2] = glm::vec3(0.0f, 1.0f, 1.0f); // cyan
-        array2D[1][3] = glm::vec3(1.0f, 0.0f, 1.0f); // magenta
-
-        array2D[2][0] = glm::vec3(0.0f, 1.0f, 0.0f); // green
-        array2D[2][1] = glm::vec3(1.0f, 0.0f, 0.0f); // red
-        array2D[2][2] = glm::vec3(1.0f, 1.0f, 1.0f); // white
-        array2D[2][3] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
-
-        array2D[3][0] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
-        array2D[3][1] = glm::vec3(1.0f, 1.0f, 0.0f); // yellow
-        array2D[3][2] = glm::vec3(1.0f, 0.0f, 0.0f); // red
-        array2D[3][3] = glm::vec3(0.0f, 1.0f, 0.0f); // green
+      
 
         array<Cube, 4> eloMaluco;
         for(int i = 0; i < 4; i++)
-        {
-            eloMaluco[i] = Cube(basePoint+glm::vec3(0.0f, 0.0f, i*size/1.0f), size, array2D[i]);
+        {   
+            eloMaluco[i] = Cube(basePoint+glm::vec3(0.0f, 0.0f, i*size/1.0f), size, colors[3-i]);
             eloMaluco[i].draw();
         }
 
@@ -238,3 +223,27 @@ bool Application::insert_object(void)
 	return true;
 }
 
+/*
+      std::array<std::array<glm::vec3, 4>, 4> array2D;
+
+        // Initialize the array
+        array2D[0][0] = glm::vec3(0.0f, 0.0f, 0.0f); // yellow
+        array2D[0][1] = glm::vec3(0.0f, 1.0f, 0.0f); // green
+        array2D[0][2] = glm::vec3(1.0f, 1.0f, 1.0f); // white
+        array2D[0][3] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
+
+        array2D[1][0] = glm::vec3(1.0f, 0.0f, 0.0f); // red
+        array2D[1][1] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
+        array2D[1][2] = glm::vec3(0.0f, 1.0f, 1.0f); // cyan
+        array2D[1][3] = glm::vec3(1.0f, 0.0f, 1.0f); // magenta
+
+        array2D[2][0] = glm::vec3(0.0f, 1.0f, 0.0f); // green
+        array2D[2][1] = glm::vec3(1.0f, 0.0f, 0.0f); // red
+        array2D[2][2] = glm::vec3(1.0f, 1.0f, 1.0f); // white
+        array2D[2][3] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
+
+        array2D[3][0] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
+        array2D[3][1] = glm::vec3(1.0f, 1.0f, 0.0f); // yellow
+        array2D[3][2] = glm::vec3(1.0f, 0.0f, 0.0f); // red
+        array2D[3][3] = glm::vec3(0.0f, 1.0f, 0.0f); // green
+*/

@@ -2,7 +2,8 @@
 // application.hpp
 // Prof. Giovani Bernardes Vitor
 // ECOI24 - 2024
-
+#ifndef __APPLICATION_HPP__
+#define __APPLICATION_HPP__
 #include <iostream>
 #include <vector>
 #include <list>
@@ -15,8 +16,7 @@
 #include "square.hpp"
 #include "cube.hpp"
 
-#ifndef __APPLICATION_HPP__
-#define __APPLICATION_HPP__
+
 
 using namespace std;
 
