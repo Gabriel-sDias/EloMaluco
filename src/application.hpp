@@ -13,6 +13,7 @@
 #include "Objects.hpp"
 #include "triangle.hpp"
 #include "square.hpp"
+#include "cube.hpp"
 
 #ifndef __APPLICATION_HPP__
 #define __APPLICATION_HPP__
