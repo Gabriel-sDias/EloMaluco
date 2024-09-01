@@ -32,7 +32,7 @@ Application::~Application()
 void Application::Inicializa (void)
 {   
     // Define a cor de fundo da janela de visualização como preta
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     xf=50.0f;
     yf=50.0f;
     win=250.0f;
@@ -85,33 +85,41 @@ void Application::draw()
         std::array<std::array<glm::vec3, 4>, 4> array2D;
 
         // Initialize the array
-        array2D[0][0] = glm::vec3(1.0f/48.0f, 2.0f/48.0f, 3.0f/48.0f);
-        array2D[0][1] = glm::vec3(4.0f/48.0f, 5.0f/48.0f, 6.0f/48.0f);
-        array2D[0][2] = glm::vec3(7.0f/48.0f, 8.0f/48.0f, 9.0f/48.0f);
-        array2D[0][3] = glm::vec3(10.0f/48.0f, 11.0f/48.0f, 12.0f/48.0f);
+        array2D[0][0] = glm::vec3(0.0f, 0.0f, 0.0f); // yellow
+        array2D[0][1] = glm::vec3(0.0f, 1.0f, 0.0f); // green
+        array2D[0][2] = glm::vec3(1.0f, 1.0f, 1.0f); // white
+        array2D[0][3] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
 
-        array2D[1][0] = glm::vec3(13.0f/48.0f, 14.0f/48.0f, 15.0f/48.0f);
-        array2D[1][1] = glm::vec3(16.0f/48.0f, 17.0f/48.0f, 18.0f/48.0f);
-        array2D[1][2] = glm::vec3(19.0f/48.0f, 20.0f/48.0f, 21.0f/48.0f);
-        array2D[1][3] = glm::vec3(22.0f/48.0f, 23.0f/48.0f, 24.0f/48.0f);
+        array2D[1][0] = glm::vec3(1.0f, 0.0f, 0.0f); // red
+        array2D[1][1] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
+        array2D[1][2] = glm::vec3(0.0f, 1.0f, 1.0f); // cyan
+        array2D[1][3] = glm::vec3(1.0f, 0.0f, 1.0f); // magenta
 
-        array2D[2][0] = glm::vec3(25.0f/48.0f, 26.0f/48.0f, 27.0f/48.0f);
-        array2D[2][1] = glm::vec3(28.0f/48.0f, 29.0f/48.0f, 30.0f/48.0f);
-        array2D[2][2] = glm::vec3(31.0f/48.0f, 32.0f/48.0f, 33.0f/48.0f);
-        array2D[2][3] = glm::vec3(34.0f/48.0f, 35.0f/48.0f, 36.0f/48.0f);
+        array2D[2][0] = glm::vec3(0.0f, 1.0f, 0.0f); // green
+        array2D[2][1] = glm::vec3(1.0f, 0.0f, 0.0f); // red
+        array2D[2][2] = glm::vec3(1.0f, 1.0f, 1.0f); // white
+        array2D[2][3] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
 
-        array2D[3][0] = glm::vec3(37.0f/48.0f, 38.0f/48.0f, 39.0f/48.0f);
-        array2D[3][1] = glm::vec3(40.0f/48.0f, 41.0f/48.0f, 42.0f/48.0f);
-        array2D[3][2] = glm::vec3(43.0f/48.0f, 44.0f/48.0f, 45.0f/48.0f);
-        array2D[3][3] = glm::vec3(46.0f/48.0f, 47.0f/48.0f, 48.0f/48.0f);
+        array2D[3][0] = glm::vec3(0.0f, 0.0f, 1.0f); // blue
+        array2D[3][1] = glm::vec3(1.0f, 1.0f, 0.0f); // yellow
+        array2D[3][2] = glm::vec3(1.0f, 0.0f, 0.0f); // red
+        array2D[3][3] = glm::vec3(0.0f, 1.0f, 0.0f); // green
 
         array<Cube, 4> eloMaluco;
-
         for(int i = 0; i < 4; i++)
         {
             eloMaluco[i] = Cube(basePoint+glm::vec3(0.0f, 0.0f, i*size/1.0f), size, array2D[i]);
             eloMaluco[i].draw();
         }
+
+        // TODO: Transform this into a face of the cube
+        glBegin(GL_QUADS);
+        glColor3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 4*size/1.0f);
+        glVertex3f(size, 0.0f, 4*size/1.0f); // rightdown
+        glVertex3f(size, size, 4*size/1.0f);
+        glVertex3f(0.0f, size, 4*size/1.0f); // lefttop
+        glEnd();
 
         
     glPopMatrix();
