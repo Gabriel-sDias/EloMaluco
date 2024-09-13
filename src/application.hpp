@@ -33,11 +33,15 @@ public:
 	void MouseHandle(int button, int state, int x, int y);
 	void SpecialKeyHandle(int key, int x, int y);
 	void update(int value, void (*func_ptr)(int));
+	void keyboard(int key, int x, int y);
+	void display();
 
 private:
 
 	int time;
-	
+	float camera;
+	int index= 0;
+	array<Cube, 4> eloMaluco;
 
 	GLfloat xf;
 	GLfloat yf;
@@ -50,7 +54,6 @@ private:
 private:
 	void Inicializa (void);
 	bool insert_object(void);
-	
 };
 
 #endif

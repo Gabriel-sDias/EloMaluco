@@ -5,15 +5,24 @@ Cube::Cube()
 {
 }
 
-Cube::Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors)
+Cube::Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, float angle)
 {
     this->basePoint = basePoint;
     this->size = size;
     this->colors = colors;
+    this->angle = angle;
+}
+void Cube::setAngle(float angle){
+    this->angle=angle;
+}
+float Cube::getAngle(){
+    return this->angle;
 }
 
 void Cube::draw()
 {
+   
+
     glBegin(GL_QUADS);
     // BACKFACE
     glm::vec3 rightDown = basePoint;

@@ -14,7 +14,7 @@ using namespace std;
 void Translator::translate(){
     int counter1 = 0;
     int counter2 = 0;
-    for (string i : state)
+    for (string i : states)
     {
         string color = i.substr(0, 2);
         if (color == "vm")
@@ -51,11 +51,12 @@ void Translator::translate(){
         }
     }
 }
-Translator::Translator(vector<string> state){
-    this->state = state;
+Translator::Translator(vector<string> states){
+    this->states = states;
     translate();
 }
 std::array<std::array<glm::vec3, 4>, 4> Translator::getColorsRGB(){
     return this->colorsRGB;
 }
 
+ 

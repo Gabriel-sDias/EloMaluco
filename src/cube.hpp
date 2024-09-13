@@ -12,11 +12,14 @@ private:
     glm::vec3 basePoint;
     int size;
     std::array<glm::vec3, 4> colors;
+    float angle= 0.0f;
 
 public:
     Cube();
-    Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors); 
+    Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, float angle); 
     void draw();
+    void setAngle(float angle);
+    float getAngle();
     void rotate();
 };
 

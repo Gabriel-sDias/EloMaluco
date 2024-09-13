@@ -15,21 +15,12 @@ class Translator
 {
 private:
     std::array<std::array<glm::vec3, 4>, 4> colorsRGB;
-	vector<string> state;
+	vector<string> states;
 public:
 
-	Translator(vector<string> state);
+	Translator(vector<string> states);
     void translate ();
     std::array<std::array<glm::vec3, 4>, 4> getColorsRGB();
 };
 #endif
 
-/*
-	Vermelho = vm
-	Verde = vd
-	Amarelo = am
-	Branco = br
-	Superior = s
-	Intermediario = m
-	Inferior = i
-*/
