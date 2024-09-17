@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <tinyxml2.h>
 #include "reader.hpp"
 using namespace std;
 using namespace tinyxml2;
