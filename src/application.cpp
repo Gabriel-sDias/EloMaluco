@@ -33,6 +33,7 @@ Application::~Application()
 void Application::Inicializa(void)
 {
     // Define a cor de fundo da janela de visualização como preta
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     xf = 50.0f;
     yf = 50.0f;
@@ -54,7 +55,7 @@ void Application::draw()
     // Verde - Eixo Y
     // Azul - Eixo Z
     // Vermelho - Eixo X
-    const char *directory = "/home/gabriel/PDI/projetoPDI/EloMaluco/data/exemplo.xml";
+    const char *directory = "../data/exemplo.xml";
     Reader r(directory);
     vector<string> states = r.getStates();
     Translator translator(states);
