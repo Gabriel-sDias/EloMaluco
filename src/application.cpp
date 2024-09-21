@@ -38,6 +38,7 @@ void Application::Inicializa(void)
     yf = 50.0f;
     win = 250.0f;
     time = 0;
+    isFaceSelection = false;
     cameraAngle = 0.0f;
     cameraRadius = 20.0f;
 }
@@ -113,12 +114,15 @@ void Application::draw()
        if (i == this->index) {
            this->eloMaluco[i].highlight();
        }
+    //    If the cube is selected, start changing the faces 
+
        this->eloMaluco[i].draw();
        glPopMatrix(); 
     }
 
     glFlush();
     glutSwapBuffers();
+
 }
 
 //---------------------------------------------------------------------
@@ -163,24 +167,42 @@ bool Application::insert_object(void)
     return true;
 }
 
-void Application::keyboard(int key, int x, int y) {
+void Application::SpecialKeyHandle(int key, int x, int y) {
     float rotationAngle = 90.0f; 
 
     switch (key) {
         case GLUT_KEY_LEFT:
-            this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() - rotationAngle);
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            } else {
+                this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() - rotationAngle);
+            }
             break;
         case GLUT_KEY_RIGHT:
-            this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() + rotationAngle);
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            } else {
+                this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() + rotationAngle);
+            }
             break;
         case GLUT_KEY_UP:
-            if (this->index< this->eloMaluco.size() - 1) {       
-                ++this->index;
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            }
+            else {
+                if (this->index< this->eloMaluco.size() - 1) {       
+                    ++this->index;
+                }
             }
             break;
         case GLUT_KEY_DOWN:
-            if (this->index > 0) {
-                --this->index;
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            }
+            else{
+                if (this->index > 0) {
+                    --this->index;
+                }
             }
             break;
     }

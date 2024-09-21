@@ -42,6 +42,7 @@ private:
 	int time;
 	int index= 0;
 	array<Cube, 4> eloMaluco;
+	bool isFaceSelection;
 	float cameraAngle;
 	float cameraRadius; 
 
