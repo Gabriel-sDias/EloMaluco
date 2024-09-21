@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "translator.hpp"
-#include "reader.hpp"
+#include "XMLManager.hpp"
 #include <glm/glm.hpp>
 #include <stdlib.h>
 #include <stdio.h>
@@ -55,8 +55,76 @@ Translator::Translator(vector<string> states){
     this->states = states;
     translate();
 }
+Translator::Translator(){}
 std::array<std::array<glm::vec3, 4>, 4> Translator::getColorsRGB(){
     return this->colorsRGB;
 }
 
- 
+ void Translator::translateRGBToState(array<std::array<glm::vec3, 4>, 4> colors){
+    XMLManager saveState;
+    array<array<string, 4>, 4>state;
+     glm::vec3 brightColor = glm::vec3(0.4f, 0.4f, 0.4f);
+    for(int i =0; i<4; i++){
+        for(int j =0; j<4; j++){
+            glm::vec3 colorRGB =colors[i][j];
+
+            string color;
+            if (colorRGB == glm::vec3(1.0f, 0.0f, 0.0f) || colorRGB == (glm::vec3(1.0f, 0.0f, 0.0f)-=brightColor) )
+            {   
+                
+                if(i == 0){
+                    color ="vms";
+                }else if( i == 1 || i==2){
+                    color ="vmm";
+                }else{
+                    color ="vmi";
+                }
+            }
+            else if (colorRGB == glm::vec3(0.0f, 1.0f, 0.0f) || colorRGB == (glm::vec3(0.0f, 1.0f, 0.0f)-=brightColor))
+            {
+                
+                if(i == 0){
+                    color ="vds";
+                }else if( i == 1 || i==2){
+                    color ="vdm";
+                }else{
+                    color ="vdi";
+                }
+            }
+            else if (colorRGB == glm::vec3(1.0f, 1.0f, 0.0f) || colorRGB == (glm::vec3(1.0f, 1.0f, 0.0f)-=brightColor))
+            {
+                if(i == 0){
+                    color ="ams";
+                }else if( i == 1 || i==2){
+                    color ="amm";
+                }else{  
+                    color ="ami";
+                }
+                
+            }
+            else if (colorRGB == glm::vec3(1.0f, 1.0f, 1.0f) || colorRGB == (glm::vec3(1.0f, 1.0f, 1.0f)-=brightColor))
+            {
+                color = "br";
+                if(i == 0){
+                    color ="brs";
+                }else if( i == 1 || i==2){
+                    color ="brm";
+                }else{
+                    color ="bri";
+                }
+            }
+            else
+            {
+                if(i == 0){
+                     color="vzs";
+                }else if( i == 1 || i==2){
+                     color="vzm";
+                }else{
+                     color="vzi";
+                }
+            }
+            state[i][j] = color;
+        }
+    }
+    saveState.writer(state);
+ }

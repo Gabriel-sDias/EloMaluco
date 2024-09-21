@@ -5,18 +5,22 @@
 #include <string>
 #include <vector>
 #include "tinyxml2.h"
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <array>
 
 using namespace std;
 using namespace tinyxml2;
-class Reader
+class XMLManager
 {
 private:
 	vector<string> states;
 	const char* archive;
 public:
 	void fillStates();
-	Reader(const char* directory);
+	XMLManager(const char* directory);
+	XMLManager();
+	void writer(array<array<string, 4>, 4>state);
 	vector<string> getStates();
 
 };

@@ -36,6 +36,8 @@ public:
 	void keyboard(unsigned char key, int x, int y);
 	void display();
 	void setCamera();
+	void saveState();
+	
 
 private:
 

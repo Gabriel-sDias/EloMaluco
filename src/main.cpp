@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 
      Application app(argc,argv);
      ptr_ = &app;
-
+     
      glutDisplayFunc(draw);
      glutReshapeFunc(resize);
      glutSpecialFunc(SpecialKeyHandle);

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "reader.hpp"
+#include "XMLManager.hpp"
 #include <glm/glm.hpp>
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,7 +19,9 @@ private:
 public:
 
 	Translator(vector<string> states);
-    void translate ();
+    Translator();
+    void translateRGBToState(array<std::array<glm::vec3, 4>, 4>);
+    void translate();
     std::array<std::array<glm::vec3, 4>, 4> getColorsRGB();
 };
 #endif

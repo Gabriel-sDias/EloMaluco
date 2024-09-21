@@ -2,11 +2,14 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "reader.hpp"
+#include "XMLManager.hpp"
+#include <stdlib.h>
+#include <stdio.h>
+#include <array>
 using namespace std;
 using namespace tinyxml2;
 
-void Reader::fillStates()
+void XMLManager::fillStates()
 {
 	XMLDocument doc;
 	XMLError result = doc.LoadFile(archive);
@@ -50,13 +53,45 @@ void Reader::fillStates()
 		}
 	}
 }
-Reader::Reader(const char *archive)
+XMLManager::XMLManager(const char *archive)
 {
 	this->archive = archive;
 	fillStates();
 }
+XMLManager::XMLManager(){}
 
-vector<string> Reader::getStates()
+vector<string> XMLManager::getStates()
 {
 	return this->states;
+}
+
+void XMLManager::writer(array<array<string, 4>, 4>state){
+	XMLDocument doc;
+
+   
+    XMLElement* eloMaluco = doc.NewElement("EloMaluco");
+    doc.InsertFirstChild(eloMaluco);
+
+  
+    XMLElement* atualState = doc.NewElement("estadoAtual");
+    eloMaluco->InsertEndChild(atualState);
+
+   
+	for(int i = 0; i<4; i++){
+    	XMLElement* row = doc.NewElement("row");
+    	atualState->InsertEndChild(row);
+		for(int j = 0; j<4; j++){
+			XMLElement* col = doc.NewElement("col"); 
+			col->SetText(state[i][j].data());
+    		row->InsertEndChild(col);
+		}
+	}
+
+	if (doc.SaveFile("output.xml") != XML_SUCCESS) {
+        std::cerr << "Error saving XML file!" << std::endl;
+        return;
+    }
+
+    std::cout << "XML file created successfully!" << std::endl;
+    return;
 }

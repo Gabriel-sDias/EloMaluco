@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <array>
 #include "application.hpp"
-#include "reader.hpp"
+#include "XMLManager.hpp"
 #include "translator.hpp"
 
 
@@ -70,7 +70,7 @@ void Application::draw()
     // Azul - Eixo Z
     // Vermelho - Eixo X
     const char *directory = "../data/exemplo.xml";
-    Reader r(directory);
+    XMLManager r(directory);
     vector<string> states = r.getStates();
     Translator translator(states);
     std::array<std::array<glm::vec3, 4>, 4> colors = translator.getColorsRGB();
@@ -230,5 +230,21 @@ void Application::keyboard(unsigned char key, int x, int y)
         cameraAngle += 360.0f;
     }
 
+    if(key == 'p'){
+        saveState();
+    }
+
     glutPostRedisplay();
 }
+
+void Application::saveState(){
+    Translator translate;
+    array<std::array<glm::vec3, 4>, 4> state;
+    int counter =3;
+    for(Cube c : this->eloMaluco){
+        state[counter] = c.getColors();
+        counter--;
+    }
+    translate.translateRGBToState(state);
+}
+

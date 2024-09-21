@@ -71,3 +71,7 @@ void Cube::draw()
     frontFace.draw();
     glEnd();
 }
+
+ std::array<glm::vec3, 4>Cube::getColors(){
+    return this->colors;
+ }
