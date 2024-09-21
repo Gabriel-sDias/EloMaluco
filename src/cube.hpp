@@ -20,9 +20,9 @@ public:
     Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, float angle); 
     void draw();
     void highlight();
+    void select();
     float getAngle();
     void setAngle(float angle);
-    void rotate();
 };
 
 

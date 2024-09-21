@@ -22,6 +22,11 @@ void Cube::setAngle(float angle){
     this->angle=angle;
 }
 
+void Cube::select()
+{
+    this->isSelected = !this->isSelected;
+}
+
 void Cube::highlight()
 {
     float bright = 0.4f;
