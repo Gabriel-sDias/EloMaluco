@@ -33,15 +33,17 @@ public:
 	void MouseHandle(int button, int state, int x, int y);
 	void SpecialKeyHandle(int key, int x, int y);
 	void update(int value, void (*func_ptr)(int));
-	void keyboard(int key, int x, int y);
+	void keyboard(unsigned char key, int x, int y);
 	void display();
+	void setCamera();
 
 private:
 
 	int time;
-	float camera;
 	int index= 0;
 	array<Cube, 4> eloMaluco;
+	float cameraAngle;
+	float cameraRadius; 
 
 	GLfloat xf;
 	GLfloat yf;

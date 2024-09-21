@@ -22,7 +22,8 @@ int main(int argc, char** argv)
 
      glutDisplayFunc(draw);
      glutReshapeFunc(resize);
-     glutSpecialFunc(keyboard);
+     glutSpecialFunc(SpecialKeyHandle);
+     glutKeyboardFunc(keyboard);
      //glutTimerFunc(30,update,time);/*o update fica atualizando muito rapido e sempre reseta a tela para o estado inicial*/
      glutMainLoop();
 
