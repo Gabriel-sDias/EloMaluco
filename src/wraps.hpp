@@ -19,7 +19,8 @@ Application *ptr_;
 void draw(){ptr_->draw();}
 void resize(GLsizei w, GLsizei h) {ptr_->resize(w, h);}
 void update(int value){ptr_->update(value,&update);}
-void keyboard(int key, int x, int y){ptr_->keyboard(key, x, y);}
+void keyboard(unsigned char key, int x, int y){ptr_->keyboard(key, x, y);}
+void SpecialKeyHandle(int key, int x, int y){ptr_->SpecialKeyHandle(key, x, y);}
 
 
 #endif

@@ -22,7 +22,6 @@ Application::Application(int argc, char **argv)
     glutInitWindowPosition(100, 100);
     glutCreateWindow("ELO MALUCO");
     Inicializa();
-    this->camera = 1;
 }
 
 //---------------------------------------------------------------------
@@ -33,11 +32,15 @@ Application::~Application()
 void Application::Inicializa(void)
 {
     // Define a cor de fundo da janela de visualização como preta
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     xf = 50.0f;
     yf = 50.0f;
     win = 250.0f;
     time = 0;
+    isFaceSelection = false;
+    cameraAngle = 0.0f;
+    cameraRadius = 20.0f;
 }
 
 //---------------------------------------------------------------------
@@ -47,6 +50,18 @@ void Application::Inicializa(void)
 //}
 //---------------------------------------------------------------------
 
+void Application::setCamera()
+{
+    float cameraX = cameraRadius * cos(cameraAngle * M_PI / 180.0f);
+    float cameraY = cameraRadius * sin(cameraAngle * M_PI / 180.0f);
+    float cameraZ = 10.0f;
+
+    // Define a câmera usando gluLookAt
+    gluLookAt(cameraX, cameraY, cameraZ,  // Posição da câmera (rotacionando no plano XY, mantendo Z constante)
+              0.0f, 0.0f, 0.0f,          // Ponto de foco da câmera (centro dos cubos)
+              0.0f, 0.0f, 1.0f); 
+}
+
 void Application::draw()
 {
 
@@ -54,7 +69,7 @@ void Application::draw()
     // Verde - Eixo Y
     // Azul - Eixo Z
     // Vermelho - Eixo X
-    const char *directory = "/home/gabriel/PDI/projetoPDI/EloMaluco/data/exemplo.xml";
+    const char *directory = "../data/exemplo.xml";
     Reader r(directory);
     vector<string> states = r.getStates();
     Translator translator(states);
@@ -63,6 +78,9 @@ void Application::draw()
     glLoadIdentity();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glLoadIdentity(); 
+    setCamera();
 /*Desenha os eixos */
     glPushMatrix();
 
@@ -87,39 +105,47 @@ void Application::draw()
 /*--------- fim do desenho dos eixos ---------*/
 
     int size = 2;
-    glm::vec3 basePoint(-1.0f, -1.0f, 0.0f);   
+    glm::vec3 basePoint(-1.0f, -1.0f, 0.0f);
     for (int i = 0; i < 4; i++)
     {
-       glPushMatrix(); // salva o estado da matriz antes dos cubos antes de rotacionar
-       glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); // Rotacionar ao redor do eixo Y
+       glPushMatrix(); 
+       glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); 
        this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, colors[3 - i],this->eloMaluco[i].getAngle());
+       if (i == this->index) {
+           this->eloMaluco[i].highlight();
+       }
+    //    If the cube is selected, start changing the faces 
+
        this->eloMaluco[i].draw();
-       glPopMatrix(); // restaura a matriz anterior 
+       glPopMatrix(); 
     }
 
     glFlush();
     glutSwapBuffers();
+
 }
 
 //---------------------------------------------------------------------
 void Application::resize(GLsizei w, GLsizei h)
 {
-    // Especifica as dimensões da Viewport
+   // Evitar divisão por zero caso a altura seja 0
+    if (h == 0) {
+        h = 1;
+    }
+
+    // Configura o viewport para cobrir a nova janela
     glViewport(0, 0, w, h);
-    view_w = w;
-    view_h = h;
 
-    // Inicializa o sistema de coordenadas
+    // Inicia a matriz de projeção
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-win, win, -win, win);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(60, (GLdouble)view_w / view_h, 1, 100);
+    // Configura uma perspectiva ajustada com a nova razão de aspecto
+    float aspectRatio = (float)w / (float)h;
+    gluPerspective(45.0f, aspectRatio, 1.0f, 100.0f);  // Ângulo de visão, razão de aspecto, plano de corte próximo e distante
 
-    double rate = 1.2;
-    gluLookAt(rate * 5, camera + rate * 10, rate * 10, 0, 0, 0, 0, 0, 1);
+    // Volta para o modo de modelagem
+    glMatrixMode(GL_MODELVIEW);
     
 }
 
@@ -141,24 +167,42 @@ bool Application::insert_object(void)
     return true;
 }
 
-void Application::keyboard(int key, int x, int y) {
-    float rotationAngle = 90.0f; // Ângulo de rotação
+void Application::SpecialKeyHandle(int key, int x, int y) {
+    float rotationAngle = 90.0f; 
 
     switch (key) {
         case GLUT_KEY_LEFT:
-            this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() - rotationAngle);
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            } else {
+                this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() - rotationAngle);
+            }
             break;
         case GLUT_KEY_RIGHT:
-            this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() + rotationAngle);
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            } else {
+                this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() + rotationAngle);
+            }
             break;
         case GLUT_KEY_UP:
-            if (this->index< this->eloMaluco.size() - 1) { // Mover para o cubo de cima, se existir
-                ++this->index;
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            }
+            else {
+                if (this->index< this->eloMaluco.size() - 1) {       
+                    ++this->index;
+                }
             }
             break;
         case GLUT_KEY_DOWN:
-            if (this->index > 0) { // Mover para o cubo de baixo, se existir
-                --this->index;
+            if(this->isFaceSelection){
+                this->eloMaluco[this->index].select();
+            }
+            else{
+                if (this->index > 0) {
+                    --this->index;
+                }
             }
             break;
     }
@@ -166,71 +210,25 @@ void Application::keyboard(int key, int x, int y) {
     glutPostRedisplay(); // Solicita a redrawing da tela
 }
 
-/*
-
-//---------------------------------------------------------------------
-void Application::KeyboardHandle(unsigned char key, int x, int y)
+void Application::keyboard(unsigned char key, int x, int y)
 {
-    switch (key)
-    {
-    case 'W':
-    case 'w':
-        camera += 10;
-        break;
-    case 'R':
-    case 'r': // muda a cor corrente para vermelho
-        glColor3f(1.0f, 0.0f, 0.0f);
-        break;
-    case 'G':
-    case 'g': // muda a cor corrente para verde
-        glColor3f(0.0f, 1.0f, 0.0f);
-        break;
-    case 'B':
-    case 'b': // muda a cor corrente para azul
-        glColor3f(0.0f, 0.0f, 1.0f);
-        time++;
-        for (list<Objects *>::const_iterator it = list_.begin(); it != list_.end(); ++it)
-        {
-            (*it)->update(time);
-        }
-        break;
-    case 27: // tecla Esc (encerra o programa)
+    if (key == ' ') {
+        this->isFaceSelection = !this->isFaceSelection;
+    }
+    if (key == 27) {
         exit(0);
-        break;
     }
-}
+    if (key == 'a') {
+        cameraAngle -= 5.0f; 
+    } else if (key == 'd') {
+        cameraAngle += 5.0f; 
+    }
 
-//---------------------------------------------------------------------
-void Application::MouseHandle(int button, int state, int x, int y)
-{
-    if (button == GLUT_LEFT_BUTTON)
-    {
-        if (state == GLUT_DOWN)
-        {
-            // Troca o tamanho do retângulo, que vai do centro da
-            // janela até a posição onde o usuário clicou com o mouse
-            xf = ((2 * win * x) / view_w) - win;
-            yf = (((2 * win) * (y - view_h)) / -view_h) - win;
-        }
+    if (cameraAngle > 360.0f) {
+        cameraAngle -= 360.0f;
+    } else if (cameraAngle < 0.0f) {
+        cameraAngle += 360.0f;
     }
-}
 
-//---------------------------------------------------------------------
-void Application::SpecialKeyHandle(int key, int x, int y)
-{
-    if (key == GLUT_KEY_UP)
-    {
-        // win -= 20;
-        // glMatrixMode(GL_PROJECTION);
-        // glLoadIdentity();
-        // gluOrtho2D (-win, win, -win, win);
-        insert_object();
-    }
-    if (key == GLUT_KEY_DOWN)
-    {
-        // win += 20;
-        // glMatrixMode(GL_PROJECTION);
-        // glLoadIdentity();
-        // gluOrtho2D (-win, win, -win, win);
-    }
-}*/
+    glutPostRedisplay();
+}
