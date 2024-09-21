@@ -11,12 +11,25 @@ Cube::Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, float
     this->size = size;
     this->colors = colors;
     this->angle = angle;
+    this->isSelected = false;
 }
+
+float Cube::getAngle(){
+    return this->angle;
+}
+
 void Cube::setAngle(float angle){
     this->angle=angle;
 }
-float Cube::getAngle(){
-    return this->angle;
+
+void Cube::highlight()
+{
+    float bright = 0.4f;
+    glm::vec3 brightColor = glm::vec3(bright, bright, bright);
+    for (int i = 0; i < 4; i++)
+    {
+        this->colors[i] -= brightColor;
+    }
 }
 
 void Cube::draw()

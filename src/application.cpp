@@ -88,14 +88,17 @@ void Application::draw()
 /*--------- fim do desenho dos eixos ---------*/
 
     int size = 2;
-    glm::vec3 basePoint(-1.0f, -1.0f, 0.0f);   
+    glm::vec3 basePoint(-1.0f, -1.0f, 0.0f);
     for (int i = 0; i < 4; i++)
     {
-       glPushMatrix(); // salva o estado da matriz antes dos cubos antes de rotacionar
-       glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); // Rotacionar ao redor do eixo Y
+       glPushMatrix(); 
+       glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); 
        this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, colors[3 - i],this->eloMaluco[i].getAngle());
+       if (i == this->index) {
+           this->eloMaluco[i].highlight();
+       }
        this->eloMaluco[i].draw();
-       glPopMatrix(); // restaura a matriz anterior 
+       glPopMatrix(); 
     }
 
     glFlush();
@@ -143,7 +146,7 @@ bool Application::insert_object(void)
 }
 
 void Application::keyboard(int key, int x, int y) {
-    float rotationAngle = 90.0f; // Ângulo de rotação
+    float rotationAngle = 90.0f; 
 
     switch (key) {
         case GLUT_KEY_LEFT:
@@ -153,12 +156,12 @@ void Application::keyboard(int key, int x, int y) {
             this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() + rotationAngle);
             break;
         case GLUT_KEY_UP:
-            if (this->index< this->eloMaluco.size() - 1) { // Mover para o cubo de cima, se existir
+            if (this->index< this->eloMaluco.size() - 1) {       
                 ++this->index;
             }
             break;
         case GLUT_KEY_DOWN:
-            if (this->index > 0) { // Mover para o cubo de baixo, se existir
+            if (this->index > 0) {
                 --this->index;
             }
             break;
