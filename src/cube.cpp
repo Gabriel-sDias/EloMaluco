@@ -71,8 +71,3 @@ void Cube::draw()
     frontFace.draw();
     glEnd();
 }
-
-void Cube::rotate()
-{
-    glRotatef(1, 1, 1, 1);
-}
