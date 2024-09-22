@@ -12,8 +12,8 @@ using namespace std;
 
 
 void Translator::translate(){
-    int counter1 = 0;
-    int counter2 = 0;
+    int counter1 = 3;
+    int counter2 = 3;
     for (string i : states)
     {
         string color = i.substr(0, 2);
@@ -43,11 +43,11 @@ void Translator::translate(){
             colorsRGB[counter1][counter2] = black;
         }
 
-        counter2++;
-        if (counter2 > 3)
+        counter2--;
+        if (counter2 < 0)
         {
-            counter1++;
-            counter2 = 0;
+            counter1--;
+            counter2 = 3;
         }
     }
 }

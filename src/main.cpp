@@ -7,7 +7,8 @@
 
 #include <iostream>
 #include <thread>
-
+#include "XMLManager.hpp"
+#include "translator.hpp"
 #include "wraps.hpp"
 #include "application.hpp"
 
@@ -16,8 +17,12 @@
 int main(int argc, char** argv)
 {
      int time=0;
-
-     Application app(argc,argv);
+     const char *directory = "../data/exemplo.xml";
+     XMLManager r(directory);
+     vector<string> states = r.getStates();
+     Translator translator(states);
+     std::array<std::array<glm::vec3, 4>, 4> colors = translator.getColorsRGB();
+     Application app(argc,argv, colors);
      ptr_ = &app;
      
      glutDisplayFunc(draw);

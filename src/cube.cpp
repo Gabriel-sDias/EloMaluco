@@ -39,8 +39,6 @@ void Cube::highlight()
 
 void Cube::draw()
 {
-   
-
     glBegin(GL_QUADS);
     // BACKFACE
     glm::vec3 rightDown = basePoint;
@@ -75,3 +73,9 @@ void Cube::draw()
  std::array<glm::vec3, 4>Cube::getColors(){
     return this->colors;
  }
+
+
+
+
+
+  
