@@ -76,7 +76,7 @@ set(HDRS
     src/tinyxml2.h
     src/square.hpp
     src/cube.hpp
-    src/reader.hpp
+    src/XMLManager.hpp
     src/translator.hpp
 )
 
@@ -90,7 +90,7 @@ set(SRCS
     src/tinyxml2.cpp
     src/square.cpp
     src/cube.cpp
-    src/reader.cpp
+    src/XMLManager.cpp
     src/translator.cpp
 )
 

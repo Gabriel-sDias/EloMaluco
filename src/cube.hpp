@@ -23,6 +23,8 @@ public:
     void select();
     float getAngle();
     void setAngle(float angle);
+   
+    std::array<glm::vec3, 4> getColors();
 };
 
 

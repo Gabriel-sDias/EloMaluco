@@ -7,13 +7,13 @@
 #include <stdio.h>
 #include <array>
 #include "application.hpp"
-#include "reader.hpp"
+#include "XMLManager.hpp"
 #include "translator.hpp"
 
 
 ///////////////////////////////////////////////////////////////////////
 // Application Class
-Application::Application(int argc, char **argv)
+Application::Application(int argc, char **argv, std::array<std::array<glm::vec3, 4>, 4> colors)
 {
 
     glutInit(&argc, argv);
@@ -21,6 +21,7 @@ Application::Application(int argc, char **argv)
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("ELO MALUCO");
+    this->colors = colors;
     Inicializa();
 }
 
@@ -69,11 +70,8 @@ void Application::draw()
     // Verde - Eixo Y
     // Azul - Eixo Z
     // Vermelho - Eixo X
-    const char *directory = "../data/exemplo.xml";
-    Reader r(directory);
-    vector<string> states = r.getStates();
-    Translator translator(states);
-    std::array<std::array<glm::vec3, 4>, 4> colors = translator.getColorsRGB();
+    
+    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -110,7 +108,7 @@ void Application::draw()
     {
        glPushMatrix(); 
        glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); 
-       this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, colors[3 - i],this->eloMaluco[i].getAngle());
+       this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->colors[i],this->eloMaluco[i].getAngle());
        if (i == this->index) {
            this->eloMaluco[i].highlight();
        }
@@ -175,14 +173,17 @@ void Application::SpecialKeyHandle(int key, int x, int y) {
             if(this->isFaceSelection){
                 this->eloMaluco[this->index].select();
             } else {
-                this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() - rotationAngle);
+                switchFace(2, this->index);
+              
             }
             break;
         case GLUT_KEY_RIGHT:
             if(this->isFaceSelection){
+                
                 this->eloMaluco[this->index].select();
             } else {
-                this->eloMaluco[this->index].setAngle(eloMaluco[this->index].getAngle() + rotationAngle);
+                switchFace(1, this->index);
+                
             }
             break;
         case GLUT_KEY_UP:
@@ -230,5 +231,41 @@ void Application::keyboard(unsigned char key, int x, int y)
         cameraAngle += 360.0f;
     }
 
+    if(key == 'p'){
+        saveState();
+    }
+
     glutPostRedisplay();
+}
+
+void Application::saveState(){
+    Translator translate;
+    array<std::array<glm::vec3, 4>, 4> state;
+    int counter =3;
+    for(Cube c : this->eloMaluco){
+        state[counter] = c.getColors();
+        counter--;
+    }
+    translate.translateRGBToState(state);
+}
+
+void Application::switchFace(int direction, int index){ 
+ // direita = 1 // esquerda = 2
+     if(direction == 1){
+        array<glm::vec3, 4> cubeColors = this->colors[index];
+        glm::vec3 firstcolor = cubeColors[0]; 
+        for (int i = 1; i < 4; ++i) {
+            cubeColors[i - 1] = cubeColors[i];
+        }
+        cubeColors[4-1] = firstcolor; // coloca o primeiro elemento no final
+        this->colors[index] = cubeColors;
+    }else{
+          array<glm::vec3, 4> cubeColors = this->colors[index];
+        glm::vec3 lastcolor = cubeColors[3]; 
+        for (int i = 4-1; i > 0; --i) {
+            cubeColors[i ] = cubeColors[i-1];
+        }
+        cubeColors[0] = lastcolor; // coloca o primeiro elemento no final
+        this->colors[index] = cubeColors;
+    }
 }

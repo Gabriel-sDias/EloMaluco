@@ -24,7 +24,7 @@ using namespace std;
 class Application
 {
 public:
-	Application(int argc, char** argv);
+	Application(int argc, char** argv, std::array<std::array<glm::vec3, 4>, 4> colors);
 	~Application(void);
 
 	void draw();
@@ -36,6 +36,8 @@ public:
 	void keyboard(unsigned char key, int x, int y);
 	void display();
 	void setCamera();
+	void saveState();
+	void switchFace(int direction, int index);
 
 private:
 
@@ -45,7 +47,7 @@ private:
 	bool isFaceSelection;
 	float cameraAngle;
 	float cameraRadius; 
-
+	std::array<std::array<glm::vec3, 4>, 4> colors;
 	GLfloat xf;
 	GLfloat yf;
 	GLfloat win;
