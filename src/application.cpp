@@ -35,6 +35,7 @@ void Application::Inicializa(void)
     // Define a cor de fundo da janela de visualização como preta
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    index = 0;
     xf = 50.0f;
     yf = 50.0f;
     win = 250.0f;
@@ -42,6 +43,7 @@ void Application::Inicializa(void)
     isFaceSelection = false;
     cameraAngle = 0.0f;
     cameraRadius = 20.0f;
+    faceIndex = 0;
 }
 
 //---------------------------------------------------------------------
@@ -101,9 +103,18 @@ void Application::draw()
     glEnd();
     glPopMatrix();
 /*--------- fim do desenho dos eixos ---------*/
-
     int size = 2;
     glm::vec3 basePoint(-1.0f, -1.0f, 0.0f);
+
+    glColor3f(0,0,0); 
+
+    glBegin(GL_QUADS);
+        glVertex3f(-size/2,  size/2,  size*4); 
+        glVertex3f( size/2,  size/2,  size*4);  
+        glVertex3f( size/2, -size/2,  size*4);  
+        glVertex3f(-size/2, -size/2,  size*4);  
+    glEnd();
+
     for (int i = 0; i < 4; i++)
     {
        glPushMatrix(); 
@@ -111,9 +122,12 @@ void Application::draw()
        this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->colors[i],this->eloMaluco[i].getAngle());
        if (i == this->index) {
            this->eloMaluco[i].highlight();
+           if (this->isFaceSelection) {
+            this->eloMaluco[i].setFaceIndex(this->faceIndex);
+            this->eloMaluco[i].select();
+        }
        }
-    //    If the cube is selected, start changing the faces 
-
+       
        this->eloMaluco[i].draw();
        glPopMatrix(); 
     }
@@ -171,36 +185,45 @@ void Application::SpecialKeyHandle(int key, int x, int y) {
     switch (key) {
         case GLUT_KEY_LEFT:
             if(this->isFaceSelection){
-                this->eloMaluco[this->index].select();
+                if(this->faceIndex == 0){
+                    this->faceIndex = 3;
+                } else {
+                    this->faceIndex--;
+                }
             } else {
                 switchFace(2, this->index);
-              
             }
             break;
         case GLUT_KEY_RIGHT:
             if(this->isFaceSelection){
-                
-                this->eloMaluco[this->index].select();
+                if(this->faceIndex == 3){
+                    this->faceIndex = 0;
+                } else {
+                    this->faceIndex++;
+                }
             } else {
                 switchFace(1, this->index);
-                
             }
             break;
         case GLUT_KEY_UP:
-            if(this->isFaceSelection){
-                this->eloMaluco[this->index].select();
+            if(this->isFaceSelection && this->index < 3){
+                if (this->colors[index + 1][faceIndex] == glm::vec3(0.0f, 0.0f, 0.0f)){
+                    switchFace(3, this->index);
+                }
             }
-            else {
+            else if (!this->isFaceSelection) {
                 if (this->index< this->eloMaluco.size() - 1) {       
                     ++this->index;
                 }
             }
             break;
         case GLUT_KEY_DOWN:
-            if(this->isFaceSelection){
-                this->eloMaluco[this->index].select();
+            if(this->isFaceSelection && this->index > 0){
+                if (this->colors[index - 1][faceIndex] == glm::vec3(0.0f, 0.0f, 0.0f)){
+                    switchFace(4, this->index);
+                }
             }
-            else{
+            else if (!this->isFaceSelection){
                 if (this->index > 0) {
                     --this->index;
                 }
@@ -208,7 +231,7 @@ void Application::SpecialKeyHandle(int key, int x, int y) {
             break;
     }
 
-    glutPostRedisplay(); // Solicita a redrawing da tela
+    glutPostRedisplay(); 
 }
 
 void Application::keyboard(unsigned char key, int x, int y)
@@ -250,7 +273,7 @@ void Application::saveState(){
 }
 
 void Application::switchFace(int direction, int index){ 
- // direita = 1 // esquerda = 2
+ // direita = 1 // esquerda = 2 // cima = 3 // baixo = 4
      if(direction == 1){
         array<glm::vec3, 4> cubeColors = this->colors[index];
         glm::vec3 firstcolor = cubeColors[0]; 
@@ -259,13 +282,21 @@ void Application::switchFace(int direction, int index){
         }
         cubeColors[4-1] = firstcolor; // coloca o primeiro elemento no final
         this->colors[index] = cubeColors;
-    }else{
+    }else if (direction == 2){
           array<glm::vec3, 4> cubeColors = this->colors[index];
-        glm::vec3 lastcolor = cubeColors[3]; 
+        glm::vec3 lastcolor = cubeColors[3];
         for (int i = 4-1; i > 0; --i) {
             cubeColors[i ] = cubeColors[i-1];
         }
         cubeColors[0] = lastcolor; // coloca o primeiro elemento no final
         this->colors[index] = cubeColors;
+    } else if (direction == 3) {
+        glm::vec3 colorTemp = this->colors[index][faceIndex];
+        this->colors[index][faceIndex] = this->colors[index+1][faceIndex];
+        this->colors[index+1][faceIndex] = colorTemp;
+    } else if (direction == 4) {
+        glm::vec3 colorTemp = this->colors[index][faceIndex];
+        this->colors[index][faceIndex] = this->colors[index-1][faceIndex];
+        this->colors[index-1][faceIndex] = colorTemp;
     }
 }
