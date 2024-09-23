@@ -42,7 +42,8 @@ public:
 private:
 
 	int time;
-	int index= 0;
+	int index;
+	int faceIndex;
 	array<Cube, 4> eloMaluco;
 	bool isFaceSelection;
 	float cameraAngle;
