@@ -364,7 +364,13 @@ void Application::keyboard(unsigned char key, int x, int y)
 void Application::saveState()
 {
     Translator translate;
-    translate.translateRGBToState(this->colors);
+    array<std::array<glm::vec3, 4>, 4> state;
+    int counter =3;
+    for(Cube c : this->eloMaluco){
+        state[counter] = c.getColors();
+        counter--;
+    }
+    translate.translateRGBToState(state);
 }
 void Application::popup(){
     if (this->showPopup) {
