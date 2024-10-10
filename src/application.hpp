@@ -38,12 +38,18 @@ public:
 	void setCamera();
 	void saveState();
 	void switchFace(int direction, int index);
-
+	void drawMenu();
+	void menuSelect();
+	void newGame();
+	void popup();
 private:
 
 	int time;
 	int index;
 	int faceIndex;
+	bool showMenu = true;
+	bool showPopup = false;
+	int menuIndex=0;
 	array<Cube, 4> eloMaluco;
 	bool isFaceSelection;
 	float cameraAngle;

@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <array>
+#include <algorithm>  
+#include <random>     
 using namespace std;
 using namespace tinyxml2;
 
@@ -15,9 +17,10 @@ void XMLManager::fillStates()
 	XMLError result = doc.LoadFile(archive);
 	if (result != XML_SUCCESS)
 	{
-		std::cerr << "Error loading XML file!" << std::endl;
+		this->xmlError = true;
 		return;
 	}
+	this->xmlError = false;
 	// Acessa o elemento raiz
 	XMLElement *root = doc.RootElement();
 	if (root == nullptr)
@@ -68,12 +71,11 @@ vector<string> XMLManager::getStates()
 void XMLManager::writer(array<array<string, 4>, 4>state){
 	XMLDocument doc;
 
-   
     XMLElement* eloMaluco = doc.NewElement("EloMaluco");
     doc.InsertFirstChild(eloMaluco);
 
   
-    XMLElement* atualState = doc.NewElement("estadoAtual");
+    XMLElement* atualState = doc.NewElement("EstadoAtual");
     eloMaluco->InsertEndChild(atualState);
 
    
@@ -94,4 +96,16 @@ void XMLManager::writer(array<array<string, 4>, 4>state){
 
     std::cout << "XML file created successfully!" << std::endl;
     return;
+}
+
+vector<string> XMLManager::randomState(){
+	vector<string> randomState ={"vms","vds","ams","brs","vmm","vdm","amm","brm","vmm","vdm","amm","brm","vmi","vdi","ami","vzo"};
+	random_device rd;
+    mt19937 g(rd());
+    shuffle(randomState.begin(), randomState.end(), g);
+	return randomState;
+}
+
+bool XMLManager::getxmlError(){
+	return this->xmlError;
 }

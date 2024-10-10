@@ -16,12 +16,14 @@ class XMLManager
 private:
 	vector<string> states;
 	const char* archive;
+	bool xmlError;
 public:
 	void fillStates();
 	XMLManager(const char* directory);
 	XMLManager();
 	void writer(array<array<string, 4>, 4>state);
 	vector<string> getStates();
-
+	vector<string> randomState();
+	bool getxmlError();
 };
 #endif
