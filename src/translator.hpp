@@ -16,13 +16,17 @@ class Translator
 private:
     std::array<std::array<glm::vec3, 4>, 4> colorsRGB;
 	vector<string> states;
+    int vzoCubeIndex;
+    int vzoFaceIndex;
 public:
 
 	Translator(vector<string> states);
     Translator();
-    void translateRGBToState(array<std::array<glm::vec3, 4>, 4>);
+    void translateRGBToState(array<std::array<glm::vec3, 4>, 4>, bool find);
     void translate();
-    std::array<std::array<glm::vec3, 4>, 4> getColorsRGB();
+    int getVzoCubeIndex();
+    int getVzoFaceIndex();
+    array<std::array<glm::vec3, 4>, 4> getColorsRGB();
 };
 #endif
 

@@ -43,6 +43,11 @@ void Application::Inicializa(void)
     cameraAngle = 0.0f;
     cameraRadius = 20.0f;
     faceIndex = 0;
+    showMenu = true;
+	showPopup = false;
+	showSolution =false;
+    menuIndex=0;
+    stepsSolution=0;
 }
 
 //---------------------------------------------------------------------
@@ -186,7 +191,7 @@ bool Application::insert_object(void)
 
 void Application::drawMenu()
 {
-    const char *menuOptions[] = {"New Game", "Continue", "Exit"};
+    const char *menuOptions[] = {"New Game", "Continue","Show Solution", "Exit"};
     int numOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
 
     glMatrixMode(GL_PROJECTION);
@@ -331,7 +336,7 @@ void Application::keyboard(unsigned char key, int x, int y)
     {
         this->isFaceSelection = !this->isFaceSelection;
     }
-    if (key == 27 && !this->showMenu)
+    if (key == 27 && !this->showMenu)//Tecla ESC
     {
         exit(0);
     }
@@ -357,6 +362,11 @@ void Application::keyboard(unsigned char key, int x, int y)
     {
         saveState();
     }
+    if(key == 'n' && this->showSolution){
+        showSolutionSteps(1);
+    }else if(key == 'b' && this->showSolution){
+        showSolutionSteps(2);
+    }
 
     glutPostRedisplay();
 }
@@ -370,7 +380,7 @@ void Application::saveState()
         state[counter] = c.getColors();
         counter--;
     }
-    translate.translateRGBToState(state);
+    translate.translateRGBToState(state, false);
 }
 void Application::popup(){
     if (this->showPopup) {
@@ -448,13 +458,64 @@ void Application::menuSelect(){
     }else if(this->menuIndex == 1){
      const char *directory = "../build/output.xml";
      XMLManager r(directory);
-     if(r.getxmlError()){this->showPopup = true; return;}
+    if(r.getxmlError()){
+        this->showPopup = true;
+        return;
+    }
      vector<string> states = r.getStates();
      Translator translator(states);
      this->colors = translator.getColorsRGB();
      this->showMenu = false;
+    }else if(this->menuIndex == 2){
+        solution();
+        this->showSolution = true;
+        this->showMenu = false;
     }else{
+
         exit(0);
     }
 }
-
+void Application::solution(){
+    this->stepsSolution =0;
+    this->solutionSteps.push_back(this->colors);
+    const char *directory = "../data/solution.xml";
+    XMLManager manager(directory);
+    manager.solutionReader();
+    vector<string> steps = manager.getSolutionSteps();
+    for(string i : steps){
+        if(i == "rsd"){
+            switchFace(2, 3);
+        }else if(i == "rse"){
+            switchFace(1, 3);
+        }else if(i =="rid"){
+            switchFace(2, 0);
+        }else if(i == "rie"){
+            switchFace(1, 0);
+        }else if( i =="mfc"){
+            findVoidFace();
+            switchFace(3, this->index -1);
+        }else{
+            findVoidFace();
+            switchFace(4, this->index+1);
+        }
+        this->solutionSteps.push_back(this->colors);
+    }
+}
+void Application::findVoidFace(){
+    Translator translator;
+    translator.translateRGBToState(this->colors, true);
+    this->faceIndex = translator.getVzoFaceIndex();
+    this->index = translator.getVzoCubeIndex();
+}
+void Application::showSolutionSteps(int direction){
+    if(direction == 1 && this->stepsSolution < solutionSteps.size()-1){
+        this->stepsSolution++;
+    }else if(direction == 2 && this->stepsSolution > 0){
+        this->stepsSolution--;
+    }
+    this->colors = this->solutionSteps[this->stepsSolution];
+    glutPostRedisplay();
+}
+bool Application::isSolve(){
+    
+}

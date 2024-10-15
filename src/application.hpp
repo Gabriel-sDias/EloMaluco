@@ -42,19 +42,27 @@ public:
 	void menuSelect();
 	void newGame();
 	void popup();
+	void solution();
+	void findVoidFace();
+	void showSolutionSteps(int direction);
+	bool isSolve();
 private:
 
 	int time;
 	int index;
+	int stepsSolution;
 	int faceIndex;
-	bool showMenu = true;
-	bool showPopup = false;
-	int menuIndex=0;
+	int voidFace;
+	bool showMenu;
+	bool showPopup;
+	bool showSolution;
+	int menuIndex;
 	array<Cube, 4> eloMaluco;
+	vector<array<std::array<glm::vec3, 4>, 4>> solutionSteps;
 	bool isFaceSelection;
 	float cameraAngle;
 	float cameraRadius; 
-	std::array<std::array<glm::vec3, 4>, 4> colors;
+	array<std::array<glm::vec3, 4>, 4> colors;
 	GLfloat xf;
 	GLfloat yf;
 	GLfloat win;

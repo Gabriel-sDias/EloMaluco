@@ -11,6 +11,13 @@
 using namespace std;
 using namespace tinyxml2;
 
+XMLManager::XMLManager(const char *archive)
+{
+	this->archive = archive;
+	fillStates();
+}
+XMLManager::XMLManager(){}
+
 void XMLManager::fillStates()
 {
 	XMLDocument doc;
@@ -56,12 +63,6 @@ void XMLManager::fillStates()
 		}
 	}
 }
-XMLManager::XMLManager(const char *archive)
-{
-	this->archive = archive;
-	fillStates();
-}
-XMLManager::XMLManager(){}
 
 vector<string> XMLManager::getStates()
 {
@@ -108,4 +109,44 @@ vector<string> XMLManager::randomState(){
 
 bool XMLManager::getxmlError(){
 	return this->xmlError;
+}
+vector<string> XMLManager::getSolutionSteps(){
+	return this->solutionSteps;
+}
+void XMLManager::solutionReader(){
+	XMLDocument doc;
+	XMLError result = doc.LoadFile(archive);
+	if (result != XML_SUCCESS)
+	{
+		this->xmlError = true;
+		return;
+	}
+	this->xmlError = false;
+	// Acessa o elemento raiz
+	XMLElement *root = doc.RootElement();
+	if (root == nullptr)
+	{
+		std::cerr << "Error: no root element!" << std::endl;
+		return;
+	}
+	XMLElement *steps = root->FirstChildElement("Acoes");
+	if (steps == nullptr)
+	{
+		std::cerr << "Error: no atualState element!" << std::endl;
+		return;
+	}
+
+	for (XMLElement *acoes = steps->FirstChildElement("acao"); acoes != nullptr; acoes = acoes->NextSiblingElement("acao"))
+		{
+			if (acoes)
+			{
+				const char *nextStep = acoes->GetText();
+				if (nextStep)
+				{
+					string stepText = nextStep;
+					solutionSteps.push_back(stepText);
+				}
+			}
+		}
+	
 }
