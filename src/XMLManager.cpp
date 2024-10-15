@@ -6,8 +6,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <array>
+#include <algorithm>  
+#include <random>     
 using namespace std;
 using namespace tinyxml2;
+
+XMLManager::XMLManager(const char *archive)
+{
+	this->archive = archive;
+	fillStates();
+}
+XMLManager::XMLManager(){}
 
 void XMLManager::fillStates()
 {
@@ -15,9 +24,10 @@ void XMLManager::fillStates()
 	XMLError result = doc.LoadFile(archive);
 	if (result != XML_SUCCESS)
 	{
-		std::cerr << "Error loading XML file!" << std::endl;
+		this->xmlError = true;
 		return;
 	}
+	this->xmlError = false;
 	// Acessa o elemento raiz
 	XMLElement *root = doc.RootElement();
 	if (root == nullptr)
@@ -53,12 +63,6 @@ void XMLManager::fillStates()
 		}
 	}
 }
-XMLManager::XMLManager(const char *archive)
-{
-	this->archive = archive;
-	fillStates();
-}
-XMLManager::XMLManager(){}
 
 vector<string> XMLManager::getStates()
 {
@@ -68,12 +72,11 @@ vector<string> XMLManager::getStates()
 void XMLManager::writer(array<array<string, 4>, 4>state){
 	XMLDocument doc;
 
-   
     XMLElement* eloMaluco = doc.NewElement("EloMaluco");
     doc.InsertFirstChild(eloMaluco);
 
   
-    XMLElement* atualState = doc.NewElement("estadoAtual");
+    XMLElement* atualState = doc.NewElement("EstadoAtual");
     eloMaluco->InsertEndChild(atualState);
 
    
@@ -94,4 +97,56 @@ void XMLManager::writer(array<array<string, 4>, 4>state){
 
     std::cout << "XML file created successfully!" << std::endl;
     return;
+}
+
+vector<string> XMLManager::randomState(){
+	vector<string> randomState ={"vms","vds","ams","brs","vmm","vdm","amm","brm","vmm","vdm","amm","brm","vmi","vdi","ami","vzo"};
+	random_device rd;
+    mt19937 g(rd());
+    shuffle(randomState.begin(), randomState.end(), g);
+	return randomState;
+}
+
+bool XMLManager::getxmlError(){
+	return this->xmlError;
+}
+vector<string> XMLManager::getSolutionSteps(){
+	return this->solutionSteps;
+}
+void XMLManager::solutionReader(){
+	XMLDocument doc;
+	XMLError result = doc.LoadFile(archive);
+	if (result != XML_SUCCESS)
+	{
+		this->xmlError = true;
+		return;
+	}
+	this->xmlError = false;
+	// Acessa o elemento raiz
+	XMLElement *root = doc.RootElement();
+	if (root == nullptr)
+	{
+		std::cerr << "Error: no root element!" << std::endl;
+		return;
+	}
+	XMLElement *steps = root->FirstChildElement("Acoes");
+	if (steps == nullptr)
+	{
+		std::cerr << "Error: no atualState element!" << std::endl;
+		return;
+	}
+
+	for (XMLElement *acoes = steps->FirstChildElement("acao"); acoes != nullptr; acoes = acoes->NextSiblingElement("acao"))
+		{
+			if (acoes)
+			{
+				const char *nextStep = acoes->GetText();
+				if (nextStep)
+				{
+					string stepText = nextStep;
+					solutionSteps.push_back(stepText);
+				}
+			}
+		}
+	
 }
