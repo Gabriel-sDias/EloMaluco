@@ -13,7 +13,7 @@
 
 ///////////////////////////////////////////////////////////////////////
 // Application Class
-Application::Application(int argc, char **argv, std::array<std::array<glm::vec3, 4>, 4> colors, std::array<std::array<string, 4>, 4> textures)
+Application::Application(int argc, char **argv, std::array<std::array<glm::vec3, 4>, 4> colors, std::array<std::array<string, 4>, 4> textures, std::array<std::array<float, 4>, 4> chains)
 {
 
     glutInit(&argc, argv);
@@ -23,6 +23,7 @@ Application::Application(int argc, char **argv, std::array<std::array<glm::vec3,
     glutCreateWindow("ELO MALUCO");
     this->colors = colors;
     this->textures = textures;
+    this->chains = chains;
     Inicializa();
 }
 
@@ -119,10 +120,11 @@ void Application::draw()
     {
        glPushMatrix(); 
        glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); 
-       this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->colors[i], this->textures[i], this->eloMaluco[i].getAngle());
+       this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->colors[i], this->textures[i], this->chains[i], this->eloMaluco[i].getAngle());
        if (i == this->index) {
            this->eloMaluco[i].highlight();
            if (this->isFaceSelection) {
+            this->eloMaluco[i].unhighlight();
             this->eloMaluco[i].setFaceIndex(this->faceIndex);
             this->eloMaluco[i].select();
         }
@@ -276,27 +278,45 @@ void Application::switchFace(int direction, int index){
  // direita = 1 // esquerda = 2 // cima = 3 // baixo = 4
      if(direction == 1){
         array<glm::vec3, 4> cubeColors = this->colors[index];
-        glm::vec3 firstcolor = cubeColors[0]; 
+        array<string, 4> cubeTexturesTemp = this->textures[index];
+        glm::vec3 firstcolor = cubeColors[0];
+        string firstTexture = cubeTexturesTemp[0];
         for (int i = 1; i < 4; ++i) {
             cubeColors[i - 1] = cubeColors[i];
+            cubeTexturesTemp[i - 1] = cubeTexturesTemp[i];
         }
         cubeColors[4-1] = firstcolor; // coloca o primeiro elemento no final
+        cubeTexturesTemp[4-1] = firstTexture;
         this->colors[index] = cubeColors;
+        this->textures[index] = cubeTexturesTemp;
     }else if (direction == 2){
-          array<glm::vec3, 4> cubeColors = this->colors[index];
+        array<glm::vec3, 4> cubeColors = this->colors[index];
+        array<string, 4> cubeTexturesTemp = this->textures[index];
         glm::vec3 lastcolor = cubeColors[3];
+        string lastTexture = cubeTexturesTemp[3];
         for (int i = 4-1; i > 0; --i) {
-            cubeColors[i ] = cubeColors[i-1];
+            cubeColors[i] = cubeColors[i-1];
+            cubeTexturesTemp[i] = cubeTexturesTemp[i-1];
         }
         cubeColors[0] = lastcolor; // coloca o primeiro elemento no final
+        cubeTexturesTemp[0] = lastTexture;
         this->colors[index] = cubeColors;
+        this->textures[index] = cubeTexturesTemp;
     } else if (direction == 3) {
         glm::vec3 colorTemp = this->colors[index][faceIndex];
         this->colors[index][faceIndex] = this->colors[index+1][faceIndex];
         this->colors[index+1][faceIndex] = colorTemp;
+
+        string textureTemp = this->textures[index][faceIndex];
+        this->textures[index][faceIndex] = this->textures[index+1][faceIndex];
+        this->textures[index+1][faceIndex] = textureTemp;
     } else if (direction == 4) {
         glm::vec3 colorTemp = this->colors[index][faceIndex];
         this->colors[index][faceIndex] = this->colors[index-1][faceIndex];
         this->colors[index-1][faceIndex] = colorTemp;
+
+        string textureTemp = this->textures[index][faceIndex];
+        this->textures[index][faceIndex] = this->textures[index-1][faceIndex];
+        this->textures[index-1][faceIndex] = textureTemp;
     }
 }

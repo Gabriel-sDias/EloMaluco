@@ -10,6 +10,36 @@
 #include <array>
 using namespace std;
 
+void Translator::translateChain(){
+    int counter1 = 3;
+    int counter2 = 3;
+    for (string i : states)
+    {
+        string color = i.substr(2, 3);
+        if (color == "s")
+        {
+            float superior = 0.75f;
+            chains[counter1][counter2] = superior;
+        }
+        else if (color == "m")
+        {
+            float median = 0.5f;
+            chains[counter1][counter2] = median;
+        }
+        else if (color == "i")
+        {
+            float inferior = 0.25f;
+            chains[counter1][counter2] = inferior;
+        }
+
+        counter2--;
+        if (counter2 < 0)
+        {
+            counter1--;
+            counter2 = 3;
+        }
+    }
+}
 
 void Translator::translateTextures(){
     int counter1 = 3;
@@ -39,8 +69,7 @@ void Translator::translateTextures(){
         }
         else
         {
-            // TODO fazer o preto
-            string black = "../textures/elomalucoBranco.png";
+            string black = "../textures/elomalucoPreto.png";
             textures[counter1][counter2] = black;
         }
 
@@ -98,6 +127,7 @@ Translator::Translator(vector<string> states){
     this->states = states;
     translateColors();
     translateTextures();
+    translateChain();
 }
 Translator::Translator(){}
 
@@ -107,6 +137,10 @@ std::array<std::array<glm::vec3, 4>, 4> Translator::getColorsRGB(){
 
 std::array<std::array<string, 4>, 4> Translator::getTextures(){
     return this->textures;
+}
+
+std::array<std::array<float, 4>, 4> Translator::getChains(){
+    return this->chains;
 }
 
  void Translator::translateRGBToState(array<std::array<glm::vec3, 4>, 4> colors){

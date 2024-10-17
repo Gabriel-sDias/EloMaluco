@@ -16,6 +16,7 @@ class Translator
 private:
     std::array<std::array<glm::vec3, 4>, 4> colorsRGB;
     std::array<std::array<string, 4>, 4> textures;
+    std::array<std::array<float, 4>, 4> chains;
 	vector<string> states;
 public:
 
@@ -24,8 +25,10 @@ public:
     void translateRGBToState(array<std::array<glm::vec3, 4>, 4>);
     void translateColors();
     void translateTextures();
+    void translateChain();
     std::array<std::array<glm::vec3, 4>, 4> getColorsRGB();
     std::array<std::array<string, 4>, 4> getTextures();
+    std::array<std::array<float, 4>, 4> getChains();
 };
 #endif
 
