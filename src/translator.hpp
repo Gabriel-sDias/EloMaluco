@@ -16,7 +16,7 @@ class Translator
 private:
     std::array<std::array<string, 4>, 4> statesInOrder;
     std::array<std::array<string, 4>, 4> textures;
-    std::array<std::array<float, 4>, 4> chains;
+    std::array<std::array<string, 4>, 4> chains;
 	vector<string> states;
     int vzoCubeIndex;
     int vzoFaceIndex;
@@ -32,7 +32,7 @@ public:
     int getVzoFaceIndex();
     std::array<std::array<string, 4>, 4> getStatesInOrder();
     std::array<std::array<string, 4>, 4> getTextures();
-    std::array<std::array<float, 4>, 4> getChains();
+    std::array<std::array<string, 4>, 4> getChains();
 };
 #endif
 

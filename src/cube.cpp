@@ -5,7 +5,7 @@ Cube::Cube()
 {
 }
 
-Cube::Cube(glm::vec3 basePoint, int size, std::array<string, 4> textures, std::array<float, 4> chains, float angle)
+Cube::Cube(glm::vec3 basePoint, int size, std::array<string, 4> textures, std::array<string, 4> chains, float angle)
 {
     this->basePoint = basePoint;
     this->size = size;
@@ -61,7 +61,7 @@ void Cube::draw()
     glm::vec3 leftTop = basePoint + glm::vec3(size / 1.0f, 0.0f, size / 1.0f);
     glm::vec3 color = this->isFaceSelected(2) ? this->baseColor + this->brightColor : this->baseColor;
     string texture = this->textures[2];
-    float chain = this->chains[2];
+    string chain = this->chains[2];
     Square backFace(rightDown, leftTop, texture, chain, color);
     backFace.draw();
 

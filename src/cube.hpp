@@ -12,7 +12,7 @@ private:
     glm::vec3 basePoint;
     int size;
     std::array<string, 4> textures;
-    std::array<float, 4> chains;
+    std::array<string, 4> chains;
     float angle= 0.0f;
     bool isSelected;
     int faceIndex;
@@ -24,7 +24,7 @@ private:
 
 public:
     Cube();
-    Cube(glm::vec3 basePoint, int size, std::array<string, 4> textures, std::array<float, 4> chains, float angle); 
+    Cube(glm::vec3 basePoint, int size, std::array<string, 4> textures, std::array<string, 4> chains, float angle); 
     void draw();
     void highlight();
     void unhighlight();
