@@ -265,7 +265,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
             }
             else
             {
-                switchFace(2, this->index);
+                switchFace(1, this->index);
             }
             break;
         case GLUT_KEY_RIGHT:
@@ -282,7 +282,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
             }
             else
             {
-                switchFace(1, this->index);
+                switchFace(2, this->index);
             }
             break;
         case GLUT_KEY_UP:
