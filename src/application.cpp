@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////
 // Application Class
-Application::Application(int argc, char **argv, std::array<std::array<string, 4>, 4> orderOfStates, std::array<std::array<string, 4>, 4> textures, std::array<std::array<float, 4>, 4> chains)
+Application::Application(int argc, char **argv, std::array<std::array<string, 4>, 4> orderOfStates, std::array<std::array<string, 4>, 4> textures, std::array<std::array<string, 4>, 4> chains)
 {
 
     glutInit(&argc, argv);
@@ -406,10 +406,10 @@ void Application::switchFace(int direction, int index){
     {
         array<string, 4> orderOfStatesTemp = this->orderOfStates[index];
         array<string, 4> cubeTexturesTemp = this->textures[index];
-        array<float, 4> chainTemp = this->chains[index];
+        array<string, 4> chainTemp = this->chains[index];
         string firstState = orderOfStatesTemp[0];
         string firstTexture = cubeTexturesTemp[0];
-        float firstChain = chainTemp[0];
+        string firstChain = chainTemp[0];
         for (int i = 1; i < 4; ++i) {
             orderOfStatesTemp[i - 1] = orderOfStatesTemp[i];
             cubeTexturesTemp[i - 1] = cubeTexturesTemp[i];
@@ -424,10 +424,10 @@ void Application::switchFace(int direction, int index){
     }else if (direction == 2){
         array<string, 4> orderOfStatesTemp = this->orderOfStates[index];
         array<string, 4> cubeTexturesTemp = this->textures[index];
-        array<float, 4> chainTemp = this->chains[index];
+        array<string, 4> chainTemp = this->chains[index];
         string lastState = orderOfStatesTemp[3];
         string lastTexture = cubeTexturesTemp[3];
-        float lastChain = chainTemp[3];
+        string lastChain = chainTemp[3];
         for (int i = 4-1; i > 0; --i) {
             orderOfStatesTemp[i] = orderOfStatesTemp[i-1];
             cubeTexturesTemp[i] = cubeTexturesTemp[i-1];
@@ -448,7 +448,7 @@ void Application::switchFace(int direction, int index){
         this->textures[index][faceIndex] = this->textures[index+1][faceIndex];
         this->textures[index+1][faceIndex] = textureTemp;
 
-        float chainTemp = this->chains[index][faceIndex];
+        string chainTemp = this->chains[index][faceIndex];
         this->chains[index][faceIndex] = this->chains[index+1][faceIndex];
         this->chains[index+1][faceIndex] = chainTemp;
     } else if (direction == 4) {
@@ -460,7 +460,7 @@ void Application::switchFace(int direction, int index){
         this->textures[index][faceIndex] = this->textures[index-1][faceIndex];
         this->textures[index-1][faceIndex] = textureTemp;
 
-        float chainTemp = this->chains[index][faceIndex];
+        string chainTemp = this->chains[index][faceIndex];
         this->chains[index][faceIndex] = this->chains[index-1][faceIndex];
         this->chains[index-1][faceIndex] = chainTemp;
     }

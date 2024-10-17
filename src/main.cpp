@@ -23,7 +23,7 @@ int main(int argc, char** argv)
      Translator translator(states);
      std::array<std::array<string, 4>, 4> orderOfStates = translator.getStatesInOrder();
      std::array<std::array<string, 4>, 4> textures = translator.getTextures();
-     std::array<std::array<float, 4>, 4> chains = translator.getChains();
+     std::array<std::array<string, 4>, 4> chains = translator.getChains();
 
      Application app(argc,argv, orderOfStates, textures, chains);
      ptr_ = &app;

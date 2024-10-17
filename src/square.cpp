@@ -1,6 +1,6 @@
 #include "square.hpp"
 
-Square::Square(glm::vec3 rightDown, glm::vec3 leftTop, string texture, float chain, glm::vec3 color)
+Square::Square(glm::vec3 rightDown, glm::vec3 leftTop, string texture, string chain, glm::vec3 color)
 {
     this->rightDown = rightDown;
     this->leftTop = leftTop;
@@ -16,7 +16,7 @@ void Square::draw()
     glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_QUADS);
     glColor3f(this->color.x, this->color.y, this->color.z);
-    if(this->chain == 0.75){
+    if(this->chain == "s"){
         glTexCoord2f(0.0f, 0.75f);
         glVertex3f(this->leftTop.x, this->leftTop.y, this->rightDown.z);
         glTexCoord2f(1.0f, 0.75f);
@@ -26,7 +26,7 @@ void Square::draw()
         glTexCoord2f(0.0f, 1.0f);
         glVertex3f(this->leftTop.x, this->leftTop.y, this->leftTop.z);
     }
-    else if(this->chain == 0.25){
+    else if(this->chain == "i"){
         glTexCoord2f(0.0f, 0.0f);
         glVertex3f(this->leftTop.x, this->leftTop.y, this->rightDown.z);
         glTexCoord2f(1.0f, 0.0f);

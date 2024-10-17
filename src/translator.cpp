@@ -15,22 +15,7 @@ void Translator::translateChain(){
     int counter2 = 3;
     for (string i : states)
     {
-        string color = i.substr(2, 3);
-        if (color == "s")
-        {
-            float superior = 0.75f;
-            chains[counter1][counter2] = superior;
-        }
-        else if (color == "m")
-        {
-            float median = 0.5f;
-            chains[counter1][counter2] = median;
-        }
-        else if (color == "i")
-        {
-            float inferior = 0.25f;
-            chains[counter1][counter2] = inferior;
-        }
+        this->chains[counter1][counter2] = i.substr(2, 3);
 
         counter2--;
         if (counter2 < 0)
@@ -114,7 +99,7 @@ std::array<std::array<string, 4>, 4> Translator::getTextures(){
     return this->textures;
 }
 
-std::array<std::array<float, 4>, 4> Translator::getChains(){
+std::array<std::array<string, 4>, 4> Translator::getChains(){
     return this->chains;
 }
 
