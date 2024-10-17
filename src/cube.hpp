@@ -11,7 +11,6 @@ class Cube
 private:
     glm::vec3 basePoint;
     int size;
-    std::array<glm::vec3, 4> colors;
     std::array<string, 4> textures;
     std::array<float, 4> chains;
     float angle= 0.0f;
@@ -25,7 +24,7 @@ private:
 
 public:
     Cube();
-    Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, std::array<string, 4> textures, std::array<float, 4> chains, float angle); 
+    Cube(glm::vec3 basePoint, int size, std::array<string, 4> textures, std::array<float, 4> chains, float angle); 
     void draw();
     void highlight();
     void unhighlight();
@@ -34,9 +33,6 @@ public:
     void setAngle(float angle);
     int getFaceIndex();
     void setFaceIndex(int faceIndex);
-    glm::vec3 getBrightColor();
-   
-    std::array<glm::vec3, 4> getColors();
 };
 
 

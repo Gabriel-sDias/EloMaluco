@@ -21,11 +21,11 @@ int main(int argc, char** argv)
      XMLManager r(directory);
      vector<string> states = r.getStates();
      Translator translator(states);
-     std::array<std::array<glm::vec3, 4>, 4> colors = translator.getColorsRGB();
+     std::array<std::array<string, 4>, 4> orderOfStates = translator.getStatesInOrder();
      std::array<std::array<string, 4>, 4> textures = translator.getTextures();
      std::array<std::array<float, 4>, 4> chains = translator.getChains();
 
-     Application app(argc,argv, colors, textures, chains);
+     Application app(argc,argv, orderOfStates, textures, chains);
      ptr_ = &app;
      
      glutDisplayFunc(draw);

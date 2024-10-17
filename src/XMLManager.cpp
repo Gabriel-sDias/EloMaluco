@@ -90,7 +90,7 @@ void XMLManager::writer(array<array<string, 4>, 4>state){
 		}
 	}
 
-	if (doc.SaveFile("output.xml") != XML_SUCCESS) {
+	if (doc.SaveFile("../data/output.xml") != XML_SUCCESS) {
         std::cerr << "Error saving XML file!" << std::endl;
         return;
     }

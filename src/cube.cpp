@@ -5,11 +5,10 @@ Cube::Cube()
 {
 }
 
-Cube::Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, std::array<string, 4> textures, std::array<float, 4> chains, float angle)
+Cube::Cube(glm::vec3 basePoint, int size, std::array<string, 4> textures, std::array<float, 4> chains, float angle)
 {
     this->basePoint = basePoint;
     this->size = size;
-    this->colors = colors;
     this->angle = angle;
     this->isSelected = false;
     this->faceIndex = 0;
@@ -40,10 +39,6 @@ void Cube::setFaceIndex(int faceIndex){
     this->faceIndex = faceIndex;
 }
 
-glm::vec3 Cube::getBrightColor(){
-    return this->brightColor;
-}
-
 void Cube::select()
 {
     this->isSelected = !this->isSelected;
@@ -52,19 +47,11 @@ void Cube::select()
 void Cube::highlight()
 {
     this->baseColor += this->brightColor;
-    for (int i = 0; i < 4; i++)
-    {
-        this->colors[i] -= this->brightColor;
-    }
 }
 
 void Cube::unhighlight()
 {
     this->baseColor -= this->brightColor;
-    for (int i = 0; i < 4; i++)
-    {
-        this->colors[i] += this->brightColor;
-    }
 }
 
 void Cube::draw()
@@ -105,10 +92,6 @@ void Cube::draw()
     Square frontFace(rightDown, leftTop, texture, chain, color);
     frontFace.draw();
 }
-
- std::array<glm::vec3, 4>Cube::getColors(){
-    return this->colors;
- }
 
 
 
