@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////
 // Application Class
-Application::Application(int argc, char **argv, std::array<std::array<glm::vec3, 4>, 4> colors)
+Application::Application(int argc, char **argv, std::array<std::array<string, 4>, 4> orderOfStates, std::array<std::array<string, 4>, 4> textures, std::array<std::array<float, 4>, 4> chains)
 {
 
     glutInit(&argc, argv);
@@ -20,7 +20,9 @@ Application::Application(int argc, char **argv, std::array<std::array<glm::vec3,
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("ELO MALUCO");
-    this->colors = colors;
+    this->orderOfStates = orderOfStates;
+    this->textures = textures;
+    this->chains = chains;
     Inicializa();
 }
 
@@ -82,30 +84,29 @@ void Application::draw()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glLoadIdentity();
     setCamera();
-    /*Desenha os eixos */
-    glPushMatrix();
+/*Desenha os eixos */
+    // glPushMatrix();
 
-    glLineWidth(3.0f);
+    // glLineWidth(3.0f);
 
-    glBegin(GL_LINES);
-    glColor3f(1, 0, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(10, 0, 0);
-    glEnd();
-    glColor3f(0, 1, 0);
-    glBegin(GL_LINES);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 10, 0);
-    glEnd();
-    glColor3f(0, 0, 1);
-    glBegin(GL_LINES);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 0, 10);
-    glEnd();
-    glPopMatrix();
-    /*--------- fim do desenho dos eixos ---------*/
+    // glBegin(GL_LINES);
+    // glColor3f(1, 0, 0);
+    // glVertex3f(0, 0, 0);
+    // glVertex3f(10, 0, 0);
+    // glEnd();
+    // glColor3f(0, 1, 0);
+    // glBegin(GL_LINES);
+    // glVertex3f(0, 0, 0);
+    // glVertex3f(0, 10, 0);
+    // glEnd();
+    // glColor3f(0, 0, 1);
+    // glBegin(GL_LINES);
+    // glVertex3f(0, 0, 0);
+    // glVertex3f(0, 0, 10);
+    // glEnd();
+    // glPopMatrix();
+/*--------- fim do desenho dos eixos ---------*/
     int size = 2;
     glm::vec3 basePoint(-1.0f, -1.0f, 0.0f);
 
@@ -120,21 +121,20 @@ void Application::draw()
 
     for (int i = 0; i < 4; i++)
     {
-        glPushMatrix();
-        glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f);
-        this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->colors[i], this->eloMaluco[i].getAngle());
-        if (i == this->index)
-        {
-            this->eloMaluco[i].highlight();
-            if (this->isFaceSelection)
-            {
-                this->eloMaluco[i].setFaceIndex(this->faceIndex);
-                this->eloMaluco[i].select();
-            }
+       glPushMatrix(); 
+       glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); 
+       this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->textures[i], this->chains[i], this->eloMaluco[i].getAngle());
+       if (i == this->index) {
+           this->eloMaluco[i].highlight();
+           if (this->isFaceSelection) {
+            this->eloMaluco[i].unhighlight();
+            this->eloMaluco[i].setFaceIndex(this->faceIndex);
+            this->eloMaluco[i].select();
         }
-
-        this->eloMaluco[i].draw();
-        glPopMatrix();
+       }
+       
+       this->eloMaluco[i].draw();
+       glPopMatrix(); 
     }
 
     if (this->showMenu)
@@ -207,7 +207,7 @@ void Application::drawMenu()
     {
         if (i == this->menuIndex)
         {
-            glColor3f(1.0f, 1.0f, 1.0f); // Destaca a opção selecionada
+            glColor3f(1.0f, 1.0f, 0.0f); // Destaca a opção selecionada
         }
         else
         {
@@ -288,7 +288,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
         case GLUT_KEY_UP:
             if (this->isFaceSelection && this->index < 3)
             {
-                if (this->colors[index + 1][faceIndex] == glm::vec3(0.0f, 0.0f, 0.0f))
+                if (this->orderOfStates[index + 1][faceIndex] == "vzo")
                 {
                     switchFace(3, this->index);
                 }
@@ -304,7 +304,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
         case GLUT_KEY_DOWN:
             if (this->isFaceSelection && this->index > 0)
             {
-                if (this->colors[index - 1][faceIndex] == glm::vec3(0.0f, 0.0f, 0.0f))
+                if (this->orderOfStates[index - 1][faceIndex] == "vzo")
                 {
                     switchFace(4, this->index);
                 }
@@ -373,14 +373,8 @@ void Application::keyboard(unsigned char key, int x, int y)
 
 void Application::saveState()
 {
-    Translator translate;
-    array<std::array<glm::vec3, 4>, 4> state;
-    int counter =3;
-    for(Cube c : this->eloMaluco){
-        state[counter] = c.getColors();
-        counter--;
-    }
-    translate.translateRGBToState(state, false);
+    XMLManager manager;
+    manager.writer(this->orderOfStates);
 }
 void Application::popup(){
     if (this->showPopup) {
@@ -410,44 +404,74 @@ void Application::switchFace(int direction, int index){
 
     if (direction == 1)
     {
-        array<glm::vec3, 4> cubeColors = this->colors[index];
-        glm::vec3 firstcolor = cubeColors[0];
-        for (int i = 1; i < 4; ++i)
-        {
-            cubeColors[i - 1] = cubeColors[i];
+        array<string, 4> orderOfStatesTemp = this->orderOfStates[index];
+        array<string, 4> cubeTexturesTemp = this->textures[index];
+        array<float, 4> chainTemp = this->chains[index];
+        string firstState = orderOfStatesTemp[0];
+        string firstTexture = cubeTexturesTemp[0];
+        float firstChain = chainTemp[0];
+        for (int i = 1; i < 4; ++i) {
+            orderOfStatesTemp[i - 1] = orderOfStatesTemp[i];
+            cubeTexturesTemp[i - 1] = cubeTexturesTemp[i];
+            chainTemp[i - 1] = chainTemp[i];
         }
-        cubeColors[4 - 1] = firstcolor; // coloca o primeiro elemento no final
-        this->colors[index] = cubeColors;
-    }
-    else if (direction == 2)
-    {
-        array<glm::vec3, 4> cubeColors = this->colors[index];
-        glm::vec3 lastcolor = cubeColors[3];
-        for (int i = 4 - 1; i > 0; --i)
-        {
-            cubeColors[i] = cubeColors[i - 1];
+        orderOfStatesTemp[4-1] = firstState; // coloca o primeiro elemento no final
+        cubeTexturesTemp[4-1] = firstTexture;
+        chainTemp[4-1] = firstChain;
+        this->orderOfStates[index] = orderOfStatesTemp;
+        this->textures[index] = cubeTexturesTemp;
+        this->chains[index] = chainTemp;
+    }else if (direction == 2){
+        array<string, 4> orderOfStatesTemp = this->orderOfStates[index];
+        array<string, 4> cubeTexturesTemp = this->textures[index];
+        array<float, 4> chainTemp = this->chains[index];
+        string lastState = orderOfStatesTemp[3];
+        string lastTexture = cubeTexturesTemp[3];
+        float lastChain = chainTemp[3];
+        for (int i = 4-1; i > 0; --i) {
+            orderOfStatesTemp[i] = orderOfStatesTemp[i-1];
+            cubeTexturesTemp[i] = cubeTexturesTemp[i-1];
+            chainTemp[i] = chainTemp[i-1];
         }
-        cubeColors[0] = lastcolor; // coloca o primeiro elemento no final
-        this->colors[index] = cubeColors;
-    }
-    else if (direction == 3)
-    {
-        glm::vec3 colorTemp = this->colors[index][faceIndex];
-        this->colors[index][faceIndex] = this->colors[index + 1][faceIndex];
-        this->colors[index + 1][faceIndex] = colorTemp;
-    }
-    else if (direction == 4)
-    {
-        glm::vec3 colorTemp = this->colors[index][faceIndex];
-        this->colors[index][faceIndex] = this->colors[index - 1][faceIndex];
-        this->colors[index - 1][faceIndex] = colorTemp;
+        orderOfStatesTemp[0] = lastState; // coloca o primeiro elemento no final
+        cubeTexturesTemp[0] = lastTexture;
+        chainTemp[0] = lastChain;
+        this->orderOfStates[index] = orderOfStatesTemp;
+        this->textures[index] = cubeTexturesTemp;
+        this->chains[index] = chainTemp;
+    } else if (direction == 3) {
+        string stateTemp = this->orderOfStates[index][faceIndex];
+        this->orderOfStates[index][faceIndex] = this->orderOfStates[index+1][faceIndex];
+        this->orderOfStates[index+1][faceIndex] = stateTemp;
+
+        string textureTemp = this->textures[index][faceIndex];
+        this->textures[index][faceIndex] = this->textures[index+1][faceIndex];
+        this->textures[index+1][faceIndex] = textureTemp;
+
+        float chainTemp = this->chains[index][faceIndex];
+        this->chains[index][faceIndex] = this->chains[index+1][faceIndex];
+        this->chains[index+1][faceIndex] = chainTemp;
+    } else if (direction == 4) {
+        string stateTemp = this->orderOfStates[index][faceIndex];
+        this->orderOfStates[index][faceIndex] = this->orderOfStates[index-1][faceIndex];
+        this->orderOfStates[index-1][faceIndex] = stateTemp;
+
+        string textureTemp = this->textures[index][faceIndex];
+        this->textures[index][faceIndex] = this->textures[index-1][faceIndex];
+        this->textures[index-1][faceIndex] = textureTemp;
+
+        float chainTemp = this->chains[index][faceIndex];
+        this->chains[index][faceIndex] = this->chains[index-1][faceIndex];
+        this->chains[index-1][faceIndex] = chainTemp;
     }
 }
 void Application::newGame(){
     XMLManager manager;
     vector<string> randomState = manager.randomState();
     Translator translator(randomState);
-    this->colors = translator.getColorsRGB();
+    this->orderOfStates = translator.getStatesInOrder();
+    this->textures = translator.getTextures();
+    this->chains = translator.getChains();
     this->showMenu = false;
     glutPostRedisplay();
 }
@@ -456,16 +480,18 @@ void Application::menuSelect(){
         //logica new game gerar um novo xml e renderizar o cubo novamente
         newGame();
     }else if(this->menuIndex == 1){
-     const char *directory = "../build/output.xml";
-     XMLManager r(directory);
-    if(r.getxmlError()){
-        this->showPopup = true;
-        return;
-    }
-     vector<string> states = r.getStates();
-     Translator translator(states);
-     this->colors = translator.getColorsRGB();
-     this->showMenu = false;
+        const char *directory = "../data/output.xml";
+        XMLManager r(directory);
+        if(r.getxmlError()){
+            this->showPopup = true;
+            return;
+        }
+        vector<string> states = r.getStates();
+        Translator translator(states);
+        this->orderOfStates = translator.getStatesInOrder();
+        this->textures = translator.getTextures();
+        this->chains = translator.getChains();
+        this->showMenu = false;
     }else if(this->menuIndex == 2){
         solution();
         this->showSolution = true;
@@ -477,7 +503,8 @@ void Application::menuSelect(){
 }
 void Application::solution(){
     this->stepsSolution =0;
-    this->solutionSteps.push_back(this->colors);
+    this->solutionStepsTextures.push_back(this->textures);
+    this->solutionStepsChains.push_back(this->chains);
     const char *directory = "../data/solution.xml";
     XMLManager manager(directory);
     manager.solutionReader();
@@ -492,30 +519,32 @@ void Application::solution(){
         }else if(i == "rie"){
             switchFace(1, 0);
         }else if( i =="mfc"){
-            findVoidFace();
+            Translator translator;
+            translator.findVoidFace(this->orderOfStates);
+            this->faceIndex = translator.getVzoFaceIndex();
+            this->index = translator.getVzoCubeIndex();
             switchFace(3, this->index -1);
         }else{
-            findVoidFace();
+            Translator translator;
+            translator.findVoidFace(this->orderOfStates);
+            this->faceIndex = translator.getVzoFaceIndex();
+            this->index = translator.getVzoCubeIndex();
             switchFace(4, this->index+1);
         }
-        this->solutionSteps.push_back(this->colors);
+        this->solutionStepsTextures.push_back(this->textures);
+        this->solutionStepsChains.push_back(this->chains);
     }
 }
-void Application::findVoidFace(){
-    Translator translator;
-    translator.translateRGBToState(this->colors, true);
-    this->faceIndex = translator.getVzoFaceIndex();
-    this->index = translator.getVzoCubeIndex();
-}
 void Application::showSolutionSteps(int direction){
-    if(direction == 1 && this->stepsSolution < solutionSteps.size()-1){
+    if(direction == 1 && this->stepsSolution < solutionStepsTextures.size()-1){
         this->stepsSolution++;
     }else if(direction == 2 && this->stepsSolution > 0){
         this->stepsSolution--;
     }
-    this->colors = this->solutionSteps[this->stepsSolution];
+    this->textures = this->solutionStepsTextures[this->stepsSolution];
+    this->chains = this->solutionStepsChains[this->stepsSolution];
     glutPostRedisplay();
 }
 bool Application::isSolve(){
-    
+    return false;
 }

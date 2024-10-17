@@ -14,7 +14,9 @@ using namespace std;
 class Translator
 {
 private:
-    std::array<std::array<glm::vec3, 4>, 4> colorsRGB;
+    std::array<std::array<string, 4>, 4> statesInOrder;
+    std::array<std::array<string, 4>, 4> textures;
+    std::array<std::array<float, 4>, 4> chains;
 	vector<string> states;
     int vzoCubeIndex;
     int vzoFaceIndex;
@@ -22,11 +24,15 @@ public:
 
 	Translator(vector<string> states);
     Translator();
-    void translateRGBToState(array<std::array<glm::vec3, 4>, 4>, bool find);
-    void translate();
+    void findVoidFace(array<std::array<string, 4>, 4> orderOfStates);
+    void translateToStatesInOrder();
+    void translateTextures();
+    void translateChain();
     int getVzoCubeIndex();
     int getVzoFaceIndex();
-    array<std::array<glm::vec3, 4>, 4> getColorsRGB();
+    std::array<std::array<string, 4>, 4> getStatesInOrder();
+    std::array<std::array<string, 4>, 4> getTextures();
+    std::array<std::array<float, 4>, 4> getChains();
 };
 #endif
 

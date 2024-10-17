@@ -24,7 +24,7 @@ using namespace std;
 class Application
 {
 public:
-	Application(int argc, char** argv, std::array<std::array<glm::vec3, 4>, 4> colors);
+	Application(int argc, char** argv, std::array<std::array<string, 4>, 4> orderOfStates, std::array<std::array<string, 4>, 4> textures, std::array<std::array<float, 4>, 4> chains);
 	~Application(void);
 
 	void draw();
@@ -43,7 +43,6 @@ public:
 	void newGame();
 	void popup();
 	void solution();
-	void findVoidFace();
 	void showSolutionSteps(int direction);
 	bool isSolve();
 private:
@@ -58,11 +57,14 @@ private:
 	bool showSolution;
 	int menuIndex;
 	array<Cube, 4> eloMaluco;
-	vector<array<std::array<glm::vec3, 4>, 4>> solutionSteps;
+	vector<array<std::array<string, 4>, 4>> solutionStepsTextures;
+	vector<array<std::array<float, 4>, 4>> solutionStepsChains;
 	bool isFaceSelection;
 	float cameraAngle;
 	float cameraRadius; 
-	array<std::array<glm::vec3, 4>, 4> colors;
+	std::array<std::array<string, 4>, 4> orderOfStates;
+	std::array<std::array<string, 4>, 4> textures;
+	std::array<std::array<float, 4>, 4> chains;
 	GLfloat xf;
 	GLfloat yf;
 	GLfloat win;
