@@ -22,7 +22,9 @@ int main(int argc, char** argv)
      vector<string> states = r.getStates();
      Translator translator(states);
      std::array<std::array<glm::vec3, 4>, 4> colors = translator.getColorsRGB();
-     Application app(argc,argv, colors);
+     std::array<std::array<string, 4>, 4> textures = translator.getTextures();
+
+     Application app(argc,argv, colors, textures);
      ptr_ = &app;
      
      glutDisplayFunc(draw);

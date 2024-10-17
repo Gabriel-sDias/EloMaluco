@@ -5,7 +5,7 @@ Cube::Cube()
 {
 }
 
-Cube::Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, float angle)
+Cube::Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, std::array<string, 4> textures, float angle)
 {
     this->basePoint = basePoint;
     this->size = size;
@@ -14,7 +14,8 @@ Cube::Cube(glm::vec3 basePoint, int size, std::array<glm::vec3, 4> colors, float
     this->isSelected = false;
     this->faceIndex = 0;
     this->bright = 0.4f;
-    this->brightColor = glm::vec3(this->bright, this->bright, this->bright); 
+    this->brightColor = glm::vec3(this->bright, this->bright, this->bright);
+    this->textures = textures;
 }
 
 bool Cube::isFaceSelected(int faceIndexSelected){
@@ -56,35 +57,38 @@ void Cube::highlight()
 
 void Cube::draw()
 {
-    glBegin(GL_QUADS);
+    string texturePath = "../textures/elomalucoAmarelo.png";
     // BACKFACE
     glm::vec3 rightDown = basePoint;
     glm::vec3 leftTop = basePoint + glm::vec3(size / 1.0f, 0.0f, size / 1.0f);
     glm::vec3 color = this->isFaceSelected(2) ? this->colors[2] + this->brightColor + this->brightColor : this->colors[2];
-    Square backFace(rightDown, leftTop, color);
+    string texture = this->textures[2];
+    Square backFace(rightDown, leftTop, texture);
     backFace.draw();
 
     // RIGHTFACE
     rightDown = basePoint + glm::vec3(0.0f, size / 1.0f, 0.0f);
     leftTop = basePoint + glm::vec3(0.0f, 0.0f, size / 1.0f);
     color = this->isFaceSelected(1) ? this->colors[1] + this->brightColor + this->brightColor : this->colors[1];
-    Square rightFace(rightDown, leftTop, color);
+    texture = this->textures[1];
+    Square rightFace(rightDown, leftTop, texture);
     rightFace.draw();
 
     // LEFTFACE
     rightDown = basePoint + glm::vec3(size / 1.0f, 0.0f, size / 1.0f);
     leftTop = basePoint + glm::vec3(size / 1.0f, size / 1.0f, 0.0f);
     color = this->isFaceSelected(3) ? this->colors[3] + this->brightColor + this->brightColor : this->colors[3];
-    Square leftFace(rightDown, leftTop, color);
+    texture = this->textures[3];
+    Square leftFace(rightDown, leftTop, texture);
     leftFace.draw();
 
     // FRONTFACE
     rightDown = basePoint + glm::vec3(0.0f, size / 1.0f, 0.0f);
     leftTop = basePoint + glm::vec3(size / 1.0f, size / 1.0f, size / 1.0f);
     color = this->isFaceSelected(0) ? this->colors[0] + this->brightColor + this->brightColor : this->colors[0];
-    Square frontFace(rightDown, leftTop, color);
+    texture = this->textures[0];
+    Square frontFace(rightDown, leftTop, texture);
     frontFace.draw();
-    glEnd();
 }
 
  std::array<glm::vec3, 4>Cube::getColors(){

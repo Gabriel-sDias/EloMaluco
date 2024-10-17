@@ -18,13 +18,12 @@ else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
-
 ################################################################################
 # CMake variables
 set(${PROJECT_NAME}_ROOT_DIR         ${CMAKE_SOURCE_DIR})
 
 SET(CMAKE_MODULE_PATH                ${${PROJECT_NAME}_ROOT_DIR}/cmake)
-SET(CMAKE_CURRENT_BINARY_DIR            ${${PROJECT_NAME}_ROOT_DIR}/build)
+SET(CMAKE_CURRENT_BINARY_DIR         ${${PROJECT_NAME}_ROOT_DIR}/build)
 SET(CMAKE_INSTALL_PREFIX             ${${PROJECT_NAME}_ROOT_DIR}/bin)
 
 ################################################################################
@@ -53,19 +52,19 @@ if(NOT GLUT_FOUND)
         message(Error "GLUT not found")
 endif(NOT GLUT_FOUND)
 
-
 ################################################################################
-# GLM
+# SOIL
 
-#find_package(GLM REQUIRED)
-#include_directories(${GLM_INCLUDE_DIRS})
-#link_directories(${GLM_LIBRARY_DIRS})
-#add_definitions(${GLM_DEFINITIONS})
+set(SOIL_INCLUDE_DIR "/usr/include/SOIL")    # Caminho para os cabeçalhos
+set(SOIL_LIBRARY "/usr/lib/libSOIL.so")      # Caminho para a biblioteca
 
-#if(NOT GLM_FOUND)
-#        message(Error "GLM not found")
-#endif(NOT GLM_FOUND)
+include_directories(${SOIL_INCLUDE_DIR})     # Incluir o diretório de cabeçalhos
+link_directories("/usr/lib")                 # Diretório da biblioteca
 
+# Verifique se a biblioteca SOIL foi encontrada
+if(NOT EXISTS ${SOIL_LIBRARY})
+    message(FATAL_ERROR "SOIL library not found in ${SOIL_LIBRARY}")
+endif()
 
 ################################################################################
 # FILES
@@ -78,11 +77,11 @@ set(HDRS
     src/cube.hpp
     src/XMLManager.hpp
     src/translator.hpp
+    src/stb_image.h
+    src/textureManager.hpp
 )
 
-
 set(SRCS
-    
     src/main.cpp
     src/application.cpp
     src/Objects.cpp
@@ -92,26 +91,22 @@ set(SRCS
     src/cube.cpp
     src/XMLManager.cpp
     src/translator.cpp
+    src/textureManager.cpp
 )
 
 ################################################################################
 # EXEC
 add_executable(${PROJECT_NAME} ${HDRS} ${SRCS})
 
-
-
-
 # LIBS
 set(LIBS
     ${OPENGL_LIBRARIES} 
     ${GLUT_LIBRARIES}
     ${GLM_LIBRARIES}
-    
+    ${SOIL_LIBRARY}
 )
 
 # LINK
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
-
 #Install
-

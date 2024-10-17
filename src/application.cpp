@@ -13,7 +13,7 @@
 
 ///////////////////////////////////////////////////////////////////////
 // Application Class
-Application::Application(int argc, char **argv, std::array<std::array<glm::vec3, 4>, 4> colors)
+Application::Application(int argc, char **argv, std::array<std::array<glm::vec3, 4>, 4> colors, std::array<std::array<string, 4>, 4> textures)
 {
 
     glutInit(&argc, argv);
@@ -22,6 +22,7 @@ Application::Application(int argc, char **argv, std::array<std::array<glm::vec3,
     glutInitWindowPosition(100, 100);
     glutCreateWindow("ELO MALUCO");
     this->colors = colors;
+    this->textures = textures;
     Inicializa();
 }
 
@@ -79,29 +80,28 @@ void Application::draw()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glLoadIdentity(); 
     setCamera();
 /*Desenha os eixos */
-    glPushMatrix();
+    // glPushMatrix();
 
-    glLineWidth(3.0f);
+    // glLineWidth(3.0f);
 
-    glBegin(GL_LINES);
-    glColor3f(1, 0, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(10, 0, 0);
-    glEnd();
-    glColor3f(0, 1, 0);
-    glBegin(GL_LINES);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 10, 0);
-    glEnd();
-    glColor3f(0, 0, 1);
-    glBegin(GL_LINES);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 0, 10);
-    glEnd();
-    glPopMatrix();
+    // glBegin(GL_LINES);
+    // glColor3f(1, 0, 0);
+    // glVertex3f(0, 0, 0);
+    // glVertex3f(10, 0, 0);
+    // glEnd();
+    // glColor3f(0, 1, 0);
+    // glBegin(GL_LINES);
+    // glVertex3f(0, 0, 0);
+    // glVertex3f(0, 10, 0);
+    // glEnd();
+    // glColor3f(0, 0, 1);
+    // glBegin(GL_LINES);
+    // glVertex3f(0, 0, 0);
+    // glVertex3f(0, 0, 10);
+    // glEnd();
+    // glPopMatrix();
 /*--------- fim do desenho dos eixos ---------*/
     int size = 2;
     glm::vec3 basePoint(-1.0f, -1.0f, 0.0f);
@@ -119,7 +119,7 @@ void Application::draw()
     {
        glPushMatrix(); 
        glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); 
-       this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->colors[i],this->eloMaluco[i].getAngle());
+       this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->colors[i], this->textures[i], this->eloMaluco[i].getAngle());
        if (i == this->index) {
            this->eloMaluco[i].highlight();
            if (this->isFaceSelection) {

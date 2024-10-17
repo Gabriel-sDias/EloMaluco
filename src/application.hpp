@@ -24,7 +24,7 @@ using namespace std;
 class Application
 {
 public:
-	Application(int argc, char** argv, std::array<std::array<glm::vec3, 4>, 4> colors);
+	Application(int argc, char** argv, std::array<std::array<glm::vec3, 4>, 4> colors, std::array<std::array<string, 4>, 4> textures);
 	~Application(void);
 
 	void draw();
@@ -49,6 +49,7 @@ private:
 	float cameraAngle;
 	float cameraRadius; 
 	std::array<std::array<glm::vec3, 4>, 4> colors;
+	std::array<std::array<string, 4>, 4> textures;
 	GLfloat xf;
 	GLfloat yf;
 	GLfloat win;

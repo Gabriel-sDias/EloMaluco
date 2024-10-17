@@ -11,7 +11,49 @@
 using namespace std;
 
 
-void Translator::translate(){
+void Translator::translateTextures(){
+    int counter1 = 3;
+    int counter2 = 3;
+    for (string i : states)
+    {
+        string color = i.substr(0, 2);
+        if (color == "vm")
+        {
+            string red = "../textures/elomalucoVermelho.png";
+            textures[counter1][counter2] = red;
+        }
+        else if (color == "vd")
+        {
+            string green = "../textures/elomalucoVerde.png";
+            textures[counter1][counter2] = green;
+        }
+        else if (color == "am")
+        {
+            string yellow = "../textures/elomalucoAmarelo.png";
+            textures[counter1][counter2] = yellow;
+        }
+        else if (color == "br")
+        {
+            string white = "../textures/elomalucoBranco.png";
+            textures[counter1][counter2] = white;
+        }
+        else
+        {
+            // TODO fazer o preto
+            string black = "../textures/elomalucoBranco.png";
+            textures[counter1][counter2] = black;
+        }
+
+        counter2--;
+        if (counter2 < 0)
+        {
+            counter1--;
+            counter2 = 3;
+        }
+    }
+}
+
+void Translator::translateColors(){
     int counter1 = 3;
     int counter2 = 3;
     for (string i : states)
@@ -51,13 +93,20 @@ void Translator::translate(){
         }
     }
 }
+
 Translator::Translator(vector<string> states){
     this->states = states;
-    translate();
+    translateColors();
+    translateTextures();
 }
 Translator::Translator(){}
+
 std::array<std::array<glm::vec3, 4>, 4> Translator::getColorsRGB(){
     return this->colorsRGB;
+}
+
+std::array<std::array<string, 4>, 4> Translator::getTextures(){
+    return this->textures;
 }
 
  void Translator::translateRGBToState(array<std::array<glm::vec3, 4>, 4> colors){

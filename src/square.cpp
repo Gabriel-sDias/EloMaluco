@@ -1,19 +1,28 @@
 #include "square.hpp"
 
-Square::Square(glm::vec3 rightDown, glm::vec3 leftTop, glm::vec3 color)
+Square::Square(glm::vec3 rightDown, glm::vec3 leftTop, string texture)
 {
     this->rightDown = rightDown;
     this->leftTop = leftTop;
-    this->color = color;
+    this->texture = texture;
 }
 
 void Square::draw()
 {
-    glColor3f(this->color.x, this->color.y, this->color.z);
+    uint textureID = TextureManager::setTexture(this->texture);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 1.0f); 
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(this->leftTop.x, this->leftTop.y, this->rightDown.z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(this->rightDown.x, this->rightDown.y, this->rightDown.z);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(this->rightDown.x, this->rightDown.y, this->leftTop.z);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(this->leftTop.x, this->leftTop.y, this->leftTop.z);
+    glEnd();
 }
 
 void Square::destroy()
