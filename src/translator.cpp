@@ -143,7 +143,15 @@ std::array<std::array<float, 4>, 4> Translator::getChains(){
     return this->chains;
 }
 
- void Translator::translateRGBToState(array<std::array<glm::vec3, 4>, 4> colors){
+std::array<std::array<string, 4>, 4> Translator::getTextures(){
+    return this->textures;
+}
+
+std::array<std::array<float, 4>, 4> Translator::getChains(){
+    return this->chains;
+}
+
+void Translator::translateRGBToState(array<std::array<glm::vec3, 4>, 4> colors, bool find){
     XMLManager saveState;
     array<array<string, 4>, 4>state;
      glm::vec3 brightColor = glm::vec3(0.4f, 0.4f, 0.4f);
@@ -198,16 +206,20 @@ std::array<std::array<float, 4>, 4> Translator::getChains(){
             }
             else
             {
-                if(i == 0){
-                     color="vzs";
-                }else if( i == 1 || i==2){
-                     color="vzm";
-                }else{
-                     color="vzi";
-                }
+              color = "vzo";
+              this->vzoCubeIndex=i;
+              this->vzoFaceIndex=j;
             }
             state[i][j] = color;
         }
     }
-    saveState.writer(state);
+    if(!find){
+        saveState.writer(state);
+    }
  }
+int Translator::getVzoCubeIndex(){
+    return this->vzoCubeIndex;
+}
+int Translator::getVzoFaceIndex(){
+    return this->vzoFaceIndex;
+}

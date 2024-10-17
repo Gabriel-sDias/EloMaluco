@@ -17,7 +17,7 @@
 int main(int argc, char** argv)
 {
      int time=0;
-     const char *directory = "../data/exemplo.xml";
+     const char *directory = "../data/solution.xml";
      XMLManager r(directory);
      vector<string> states = r.getStates();
      Translator translator(states);

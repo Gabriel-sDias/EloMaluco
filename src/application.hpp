@@ -38,13 +38,27 @@ public:
 	void setCamera();
 	void saveState();
 	void switchFace(int direction, int index);
-
+	void drawMenu();
+	void menuSelect();
+	void newGame();
+	void popup();
+	void solution();
+	void findVoidFace();
+	void showSolutionSteps(int direction);
+	bool isSolve();
 private:
 
 	int time;
 	int index;
+	int stepsSolution;
 	int faceIndex;
+	int voidFace;
+	bool showMenu;
+	bool showPopup;
+	bool showSolution;
+	int menuIndex;
 	array<Cube, 4> eloMaluco;
+	vector<array<std::array<glm::vec3, 4>, 4>> solutionSteps;
 	bool isFaceSelection;
 	float cameraAngle;
 	float cameraRadius; 
