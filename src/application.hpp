@@ -7,16 +7,12 @@
 #include <iostream>
 #include <vector>
 #include <list>
-
 #include <GL/glut.h>
-
 #include "tinyxml2.h"
 #include "Objects.hpp"
 #include "triangle.hpp"
 #include "square.hpp"
 #include "cube.hpp"
-
-
 
 using namespace std;
 
@@ -41,10 +37,10 @@ public:
 	void drawMenu();
 	void menuSelect();
 	void newGame();
-	void popup();
 	void solution();
 	void showSolutionSteps(int direction);
-	bool isSolve();
+	void checkIfIsSolve();
+	bool isSolve(int sideIndex);
 private:
 
 	int time;
@@ -53,18 +49,17 @@ private:
 	int faceIndex;
 	int voidFace;
 	bool showMenu;
-	bool showPopup;
 	bool showSolution;
 	int menuIndex;
 	array<Cube, 4> eloMaluco;
-	vector<array<std::array<string, 4>, 4>> solutionStepsTextures;
-	vector<array<std::array<string, 4>, 4>> solutionStepsChains;
+	vector<array<array<string, 4>, 4>> solutionStepsTextures;
+	vector<array<array<string, 4>, 4>> solutionStepsChains;
 	bool isFaceSelection;
 	float cameraAngle;
 	float cameraRadius; 
-	std::array<std::array<string, 4>, 4> orderOfStates;
-	std::array<std::array<string, 4>, 4> textures;
-	std::array<std::array<string, 4>, 4> chains;
+	array<array<string, 4>, 4> orderOfStates;
+	array<array<string, 4>, 4> textures;
+	array<array<string, 4>, 4> chains;
 	GLfloat xf;
 	GLfloat yf;
 	GLfloat win;

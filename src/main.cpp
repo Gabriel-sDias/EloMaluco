@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 
      Application app(argc,argv, orderOfStates, textures, chains);
      ptr_ = &app;
+
      
      glutDisplayFunc(draw);
      glutReshapeFunc(resize);
@@ -37,6 +38,7 @@ int main(int argc, char** argv)
 
      return 0;
 }
+
 /*
   glutKeyboardFunc(KeyboardHandle);
      glutMouseFunc(MouseHandle);
