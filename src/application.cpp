@@ -141,10 +141,6 @@ void Application::draw()
     if (this->showMenu){
         drawMenu();
     }
-    if(showPopup){
-        popup();
-    }
-
     glFlush();
     glutSwapBuffers();
 }
@@ -461,7 +457,7 @@ void Application::menuSelect(){
         const char *directory = "../data/output.xml";
         XMLManager r(directory);
         if(r.getxmlError()){
-            this->showPopup = true;
+            std::cerr << "Você não possui um jogo salvo." << std::endl;
             return;
         }
         vector<string> states = r.getStates();
