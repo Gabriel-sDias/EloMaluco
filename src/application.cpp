@@ -46,7 +46,6 @@ void Application::Inicializa(void)
     cameraRadius = 20.0f;
     faceIndex = 0;
     showMenu = true;
-	showPopup = false;
 	showSolution =false;
     menuIndex=0;
     stepsSolution=0;
