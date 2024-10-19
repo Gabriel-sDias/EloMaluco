@@ -12,7 +12,7 @@ Square::Square(glm::vec3 rightDown, glm::vec3 leftTop, string texture, string ch
 void Square::draw()
 {
     uint textureID = TextureManager::setTexture(this->texture);
-    glEnable(GL_TEXTURE_2D);
+   
     glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_QUADS);
     glColor3f(this->color.x, this->color.y, this->color.z);

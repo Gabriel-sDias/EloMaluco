@@ -46,7 +46,6 @@ void Application::Inicializa(void)
     cameraRadius = 20.0f;
     faceIndex = 0;
     showMenu = true;
-	showPopup = false;
 	showSolution =false;
     menuIndex=0;
     stepsSolution=0;
@@ -85,6 +84,7 @@ void Application::draw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     setCamera();
+ 
 /*Desenha os eixos */
     // glPushMatrix();
 
@@ -118,11 +118,11 @@ void Application::draw()
     glVertex3f(size / 2, -size / 2, size * 4);
     glVertex3f(-size / 2, -size / 2, size * 4);
     glEnd();
-
+    glEnable(GL_TEXTURE_2D); 
     for (int i = 0; i < 4; i++)
     {
        glPushMatrix(); 
-       glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f); 
+       glRotatef(this->eloMaluco[i].getAngle(), 0.0f, 0.0f, 1.0f);
        this->eloMaluco[i] = Cube(basePoint + glm::vec3(0.0f, 0.0f, i * size / 1.0f), size, this->textures[i], this->chains[i], this->eloMaluco[i].getAngle());
        if (i == this->index) {
            this->eloMaluco[i].highlight();
@@ -136,13 +136,9 @@ void Application::draw()
        this->eloMaluco[i].draw();
        glPopMatrix(); 
     }
-
-    if (this->showMenu)
-    {
+    glDisable(GL_TEXTURE_2D);
+    if (this->showMenu){
         drawMenu();
-    }
-    if(showPopup){
-        popup();
     }
     glFlush();
     glutSwapBuffers();
@@ -192,7 +188,7 @@ bool Application::insert_object(void)
 void Application::drawMenu()
 {
     const char *menuOptions[] = {"New Game", "Continue","Show Solution", "Exit"};
-    int numOptions = sizeof(menuOptions) / sizeof(menuOptions[0]);
+    int numOptions = 4;
 
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -207,11 +203,11 @@ void Application::drawMenu()
     {
         if (i == this->menuIndex)
         {
-            glColor3f(1.0f, 1.0f, 0.0f); // Destaca a opção selecionada
+            glColor3f(0.0f, 0.0f, 0.0f); // Destaca a opção selecionada
         }
         else
         {
-            glColor3f(0.0f, 0.0f, 0.0f); // Outras opções
+            glColor3f(1.0f, 1.0f, 1.0f); // Outras opções
         }
 
         glRasterPos2i(100, 200 - i * 30);
@@ -237,10 +233,10 @@ void Application::SpecialKeyHandle(int key, int x, int y)
         switch (key)
         {
         case GLUT_KEY_UP:
-            menuIndex = (menuIndex > 0) ? menuIndex - 1 : 2;
+            menuIndex = (menuIndex > 0) ? menuIndex - 1 : 3;
             break;
         case GLUT_KEY_DOWN:
-            menuIndex = (menuIndex < 2) ? menuIndex + 1 : 0;
+            menuIndex = (menuIndex < 3) ? menuIndex + 1 : 0;
             break;
         }
             
@@ -266,6 +262,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
             else
             {
                 switchFace(1, this->index);
+                checkIfIsSolve();
             }
             break;
         case GLUT_KEY_RIGHT:
@@ -283,6 +280,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
             else
             {
                 switchFace(2, this->index);
+                checkIfIsSolve();
             }
             break;
         case GLUT_KEY_UP:
@@ -291,6 +289,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
                 if (this->orderOfStates[index + 1][faceIndex] == "vzo")
                 {
                     switchFace(3, this->index);
+                    checkIfIsSolve();
                 }
             }
             else if (!this->isFaceSelection)
@@ -307,6 +306,7 @@ void Application::SpecialKeyHandle(int key, int x, int y)
                 if (this->orderOfStates[index - 1][faceIndex] == "vzo")
                 {
                     switchFace(4, this->index);
+                    checkIfIsSolve();
                 }
             }
             else if (!this->isFaceSelection)
@@ -329,40 +329,34 @@ void Application::keyboard(unsigned char key, int x, int y)
         this->showMenu = !this->showMenu;
         glutPostRedisplay();
     }
-    if(key == 13 && this->showMenu){//TECLA ENTER
+    else if(key == 13 && this->showMenu){//TECLA ENTER
         menuSelect();
     }
-    else if (key == ' ' && !this->showMenu)
-    {
+    else if (key == ' ' && !this->showMenu){
         this->isFaceSelection = !this->isFaceSelection;
     }
-    if (key == 27 && !this->showMenu)//Tecla ESC
-    {
+    else if (key == 27 && !this->showMenu){//Tecla ESC
         exit(0);
     }
-    if (key == 'a' && !this->showMenu)
+    else if (key == 'a' && !this->showMenu)
     {
         cameraAngle -= 5.0f;
+        if (cameraAngle < 0.0f && !this->showMenu){
+            cameraAngle += 360.0f;
+        }
     }
     else if (key == 'd' && !this->showMenu)
     {
         cameraAngle += 5.0f;
+        if (cameraAngle > 360.0f && !this->showMenu){
+            cameraAngle -= 360.0f;
+        }
     }
-
-    if (cameraAngle > 360.0f && !this->showMenu)
-    {
-        cameraAngle -= 360.0f;
-    }
-    else if (cameraAngle < 0.0f && !this->showMenu)
-    {
-        cameraAngle += 360.0f;
-    }
-
-    if (key == 'p' && !this->showMenu)
+    else if (key == 'p' && !this->showMenu)
     {
         saveState();
     }
-    if(key == 'n' && this->showSolution){
+    else if(key == 'n' && this->showSolution){
         showSolutionSteps(1);
     }else if(key == 'b' && this->showSolution){
         showSolutionSteps(2);
@@ -375,28 +369,6 @@ void Application::saveState()
 {
     XMLManager manager;
     manager.writer(this->orderOfStates);
-}
-void Application::popup(){
-    if (this->showPopup) {
-        /*glPushMatrix();  // Salva o estado da matriz
-        glTranslatef(-0.8f, -1.0f, 0.0f);  // Move o texto para (2.0, 1.5) no mundo
-        // Desenha o texto no popup
-        glColor3f(1.0f, 1.0f, 1.0f); // Cor do texto
-        string text = "you do not have a save.";
-        for (char c : text) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
-        }
-        // Atualizar o tempo do popup
-        for(float i =0.f; i < 1000.0; i +=0.01f ){
-            if (i > 999) {
-                this->showPopup = false;  // Esconde o popup após o tempo
-                glutPostRedisplay();
-            }
-        }
-        glPopMatrix();  // Restaura o estado da matriz*/
-        this->showPopup = false;
-        std::cerr << "Vocẽ não possui nenhum save!" << std::endl;
-    }
 }
 void Application::switchFace(int direction, int index){
 
@@ -433,7 +405,7 @@ void Application::switchFace(int direction, int index){
             cubeTexturesTemp[i] = cubeTexturesTemp[i-1];
             chainTemp[i] = chainTemp[i-1];
         }
-        orderOfStatesTemp[0] = lastState; // coloca o primeiro elemento no final
+        orderOfStatesTemp[0] = lastState; // coloca o ultimo elemento no inicio
         cubeTexturesTemp[0] = lastTexture;
         chainTemp[0] = lastChain;
         this->orderOfStates[index] = orderOfStatesTemp;
@@ -462,8 +434,9 @@ void Application::switchFace(int direction, int index){
 
         string chainTemp = this->chains[index][faceIndex];
         this->chains[index][faceIndex] = this->chains[index-1][faceIndex];
-        this->chains[index-1][faceIndex] = chainTemp;
+        this->chains[index-1][faceIndex] = chainTemp; 
     }
+    
 }
 void Application::newGame(){
     XMLManager manager;
@@ -483,7 +456,7 @@ void Application::menuSelect(){
         const char *directory = "../data/output.xml";
         XMLManager r(directory);
         if(r.getxmlError()){
-            this->showPopup = true;
+            std::cerr << "Você não possui um jogo salvo." << std::endl;
             return;
         }
         vector<string> states = r.getStates();
@@ -545,6 +518,36 @@ void Application::showSolutionSteps(int direction){
     this->chains = this->solutionStepsChains[this->stepsSolution];
     glutPostRedisplay();
 }
-bool Application::isSolve(){
+bool Application::isSolve(int sideIndex){
+    string inferior= this->orderOfStates[0][sideIndex];
+    string intermediario2 = this->orderOfStates[1][sideIndex];
+    string intermediario = this->orderOfStates[2][sideIndex];
+    string superior = this->orderOfStates[3][sideIndex];
+    
+    if(superior.substr(0, 2) == intermediario.substr(0, 2) && superior.substr(0, 2) == intermediario2.substr(0, 2)
+    && superior.substr(0, 2) == inferior.substr(0, 2)){
+        if(superior.substr(2, 3) == "s" && intermediario.substr(2, 3) == "m" && intermediario2.substr(2, 3) == "m"
+        && inferior.substr(2, 3) == "i"){
+            return true;
+        }
+    }else if(superior.substr(0, 2) == "br" && intermediario.substr(0, 2) == "br" && intermediario2.substr(0, 2) == "br"){
+        if(superior.substr(2, 3) == "s" && intermediario.substr(2, 3) == "m" && intermediario2.substr(2, 3) == "i"){
+            return true;
+        }
+    }
+    
     return false;
+    
 }
+
+void Application::checkIfIsSolve(){
+    for(int i=0; i<4; i++){
+        bool solve = isSolve(i);
+        if(!solve){
+            return;
+        }
+    }
+    std::cerr << "SUCCESS" << std::endl;
+}
+
+

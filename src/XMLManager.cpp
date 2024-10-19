@@ -80,7 +80,7 @@ void XMLManager::writer(array<array<string, 4>, 4>state){
     eloMaluco->InsertEndChild(atualState);
 
    
-	for(int i = 0; i<4; i++){
+	for(int i = 3; i >= 0 ; i--){
     	XMLElement* row = doc.NewElement("row");
     	atualState->InsertEndChild(row);
 		for(int j = 0; j<4; j++){
@@ -100,7 +100,7 @@ void XMLManager::writer(array<array<string, 4>, 4>state){
 }
 
 vector<string> XMLManager::randomState(){
-	vector<string> randomState ={"vms","vds","ams","brs","vmm","vdm","amm","brm","vmm","vdm","amm","brm","vmi","vdi","ami","vzo"};
+	vector<string> randomState ={"vms","vds","ams","brs","vmm","vdm","amm","brm","vmm","vdm","amm","bri","vmi","vdi","ami","vzo"};
 	random_device rd;
     mt19937 g(rd());
     shuffle(randomState.begin(), randomState.end(), g);
