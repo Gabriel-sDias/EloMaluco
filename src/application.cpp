@@ -481,7 +481,8 @@ void Application::checkIfIsSolve(){
             return;
         }
     }
-    std::cerr << "SUCCESS" << std::endl;
+    std::cout << "Você solucionou o Elo Maluco!" << std::endl;
+    showMenu = true;
 }
 
 
