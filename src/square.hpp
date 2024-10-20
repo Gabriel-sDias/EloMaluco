@@ -1,4 +1,3 @@
-#include "Objects.hpp"
 #include "textureManager.hpp"
 #include <GL/glut.h>
 #include <glm/glm.hpp>
@@ -19,10 +18,8 @@ private:
     glm::vec3 color;
 
 public:
-    Square(glm::vec3 rightDown, glm::vec3 leftTop, string texture, string chain, glm::vec3 color); 
-    void changePosition(glm::vec3 newRightDown, glm::vec3 newLeftTop);
+    Square(glm::vec3 rightDown, glm::vec3 leftTop, string texture, string chain, glm::vec3 color);
     void draw();
-    void destroy();
 };
 
 #endif 

@@ -1,6 +1,4 @@
 #include "cube.hpp"
-#include <array>
-
 Cube::Cube()
 {
 }

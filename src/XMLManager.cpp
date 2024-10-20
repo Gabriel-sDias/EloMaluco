@@ -28,7 +28,6 @@ void XMLManager::fillStates()
 		return;
 	}
 	this->xmlError = false;
-	// Acessa o elemento raiz
 	XMLElement *root = doc.RootElement();
 	if (root == nullptr)
 	{
@@ -36,7 +35,6 @@ void XMLManager::fillStates()
 		return;
 	}
 
-	// Acessa o elemento "EstadoAtual"
 	XMLElement *atualState = root->FirstChildElement("EstadoAtual");
 	if (atualState == nullptr)
 	{
@@ -91,11 +89,11 @@ void XMLManager::writer(array<array<string, 4>, 4>state){
 	}
 
 	if (doc.SaveFile("../data/output.xml") != XML_SUCCESS) {
-        std::cerr << "Error saving XML file!" << std::endl;
+        std::cerr << "O jogo não pôde ser salvo!" << std::endl;
         return;
     }
 
-    std::cout << "XML file created successfully!" << std::endl;
+    std::cout << "Jogo salvo com sucesso!" << std::endl;
     return;
 }
 
@@ -122,7 +120,6 @@ void XMLManager::solutionReader(){
 		return;
 	}
 	this->xmlError = false;
-	// Acessa o elemento raiz
 	XMLElement *root = doc.RootElement();
 	if (root == nullptr)
 	{

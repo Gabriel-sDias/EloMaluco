@@ -70,22 +70,17 @@ endif()
 # FILES
 set(HDRS
     src/application.hpp
-    src/Objects.hpp
-    src/triangle.hpp
     src/tinyxml2.h
     src/square.hpp
     src/cube.hpp
     src/XMLManager.hpp
     src/translator.hpp
-    src/stb_image.h
     src/textureManager.hpp
 )
 
 set(SRCS
     src/main.cpp
     src/application.cpp
-    src/Objects.cpp
-    src/triangle.cpp
     src/tinyxml2.cpp
     src/square.cpp
     src/cube.cpp
